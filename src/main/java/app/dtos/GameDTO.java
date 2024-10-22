@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -34,9 +35,12 @@ public class GameDTO {
     private String description;
 
     @JsonProperty("parent_platforms")
-    private Set<PlatformDTO> platformDTOSet;
+    private Set<ParentPlatFormDTO> parentPlatformDTOSet;
 
     @JsonProperty("genres")
     private Set<GenreDTO> genreDTOSet;
 
+    public Set<PlatformDTO> getPlatformDTOSet() {
+        return parentPlatformDTOSet.stream().map(parent -> new PlatformDTO(parent.getPlatformDTO().getId(), parent.getPlatformDTO().getName())).collect(Collectors.toSet());
+    }
 }
