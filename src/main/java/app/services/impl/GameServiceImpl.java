@@ -18,11 +18,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GameServiceImpl implements GameService {
+
     private final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
 
     private final String BASE_URL = "https://api.rawg.io/api/games";
     private final String API_KEY = System.getenv("API_KEY");
 
+    private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper;
 
     public GameServiceImpl(ObjectMapper objectMapper) {
@@ -42,7 +44,7 @@ public class GameServiceImpl implements GameService {
                 .build();
 
         try {
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
                 JavaType classType = objectMapper.getTypeFactory().constructCollectionType(Set.class, GameDTO.class);
@@ -87,7 +89,7 @@ public class GameServiceImpl implements GameService {
                 .build();
 
         try {
-            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
                 JsonNode jsonNode = objectMapper.readTree(response.body());
