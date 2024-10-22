@@ -1,9 +1,8 @@
-package app.daos;
+package app.daos.impl;
 
 import app.Populator;
 import app.config.HibernateConfig;
-import app.daos.impl.GenreDAOImpl;
-import app.entities.Genre;
+import app.entities.Platform;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -19,76 +18,76 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
-class GenreDAOImplTest {
+class PlatformDAOImplTest {
 
     private static Populator populator;
-    private static GenreDAOImpl genreDAO;
+    private static PlatformDAOImpl platformDAO;
 
-    private List<Genre> genres;
+    private List<Platform> platforms;
 
     @BeforeAll
     static void beforeAll() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
         populator = new Populator(emf);
-        genreDAO = GenreDAOImpl.getInstance(emf);
+        platformDAO = PlatformDAOImpl.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        genres = populator.createGenres();
-        populator.persist(genres);
+        platforms = populator.createPlatforms();
+        populator.persist(platforms);
     }
 
     @AfterEach
     void tearDown() {
-        populator.cleanup(Genre.class);
+        populator.cleanup(Platform.class);
     }
 
     @Test
     void create() {
-        Genre lastGenre = genres.get(genres.size() - 1);
-        Genre expected = Genre.builder()
-                .id(lastGenre.getId() + 1)
-                .name("New Genre")
+        Platform lastPlatform = platforms.get(platforms.size() - 1);
+        Platform expected = Platform.builder()
+                .id(lastPlatform.getId() + 1)
+                .name("New Platform")
                 .build();
 
-        Genre actual = genreDAO.create(expected);
+        Platform actual = platformDAO.create(expected);
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     void getById() {
-        Genre expected = genres.get(0);
-        Genre actual = genreDAO.getById(expected.getId());
+        Platform expected = platforms.get(0);
+        Platform actual = platformDAO.getById(expected.getId());
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     void getAll() {
-        Set<Genre> expected = new HashSet<>(genres);
-        Set<Genre> actual = genreDAO.getAll();
+        Set<Platform> expected = new HashSet<>(platforms);
+        Set<Platform> actual = platformDAO.getAll();
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     void update() {
-        Genre expected = genres.get(0);
-        expected.setName("New Genre Name");
+        Platform expected = platforms.get(0);
+        expected.setName("Updated Platform Name");
 
-        Genre actual = genreDAO.update(expected.getId(), expected);
+        Platform actual = platformDAO.update(expected.getId(), expected);
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     void delete() {
-        Genre genre = genres.get(0);
+        Platform platform = platforms.get(0);
 
-        genreDAO.delete(genre.getId());
-        assertThrowsExactly(EntityNotFoundException.class, () -> genreDAO.getById(genre.getId()));
+        platformDAO.delete(platform.getId());
+        assertThrowsExactly(EntityNotFoundException.class, () -> platformDAO.getById(platform.getId()));
     }
 }

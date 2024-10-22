@@ -1,6 +1,7 @@
 package app;
 
 import app.entities.Genre;
+import app.entities.Platform;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -35,6 +36,25 @@ public class Populator {
                 new Genre(51L, "Indie"),
                 new Genre(59L, "Massively Multiplayer"),
                 new Genre(83L, "Platformer")
+        );
+    }
+
+    public List<Platform> createPlatforms() {
+        return List.of(
+                new Platform(1L, "PC"),
+                new Platform(2L, "PlayStation"),
+                new Platform(3L, "Xbox"),
+                new Platform(4L, "iOS"),
+                new Platform(5L, "Apple Macintosh"),
+                new Platform(6L, "Linux"),
+                new Platform(7L, "Nintendo"),
+                new Platform(8L, "Android"),
+                new Platform(9L, "Atari"),
+                new Platform(10L, "Commodore / Amiga"),
+                new Platform(11L, "SEGA"),
+                new Platform(12L, "3DO"),
+                new Platform(13L, "Neo Geo"),
+                new Platform(14L, "Web")
         );
     }
 
