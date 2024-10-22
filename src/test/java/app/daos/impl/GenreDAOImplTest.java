@@ -1,8 +1,7 @@
-package app.daos;
+package app.daos.impl;
 
 import app.Populator;
 import app.config.HibernateConfig;
-import app.daos.impl.GenreDAOImpl;
 import app.entities.Genre;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
