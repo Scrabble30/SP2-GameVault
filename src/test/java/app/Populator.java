@@ -6,11 +6,11 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class Popupaltor {
+public class Populator {
 
     private final EntityManagerFactory emf;
 
-    public Popupaltor(EntityManagerFactory emf) {
+    public Populator(EntityManagerFactory emf) {
         this.emf = emf;
     }
 

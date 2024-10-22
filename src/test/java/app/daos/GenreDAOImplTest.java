@@ -1,6 +1,6 @@
 package app.daos;
 
-import app.Popupaltor;
+import app.Populator;
 import app.config.HibernateConfig;
 import app.daos.impl.GenreDAOImpl;
 import app.entities.Genre;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class GenreDAOImplTest {
 
-    private static Popupaltor popupaltor;
+    private static Populator populator;
     private static GenreDAOImpl genreDAO;
 
     private List<Genre> genres;
@@ -30,19 +30,19 @@ class GenreDAOImplTest {
     static void beforeAll() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-        popupaltor = new Popupaltor(emf);
+        populator = new Populator(emf);
         genreDAO = GenreDAOImpl.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        genres = popupaltor.createGenres();
-        popupaltor.persist(genres);
+        genres = populator.createGenres();
+        populator.persist(genres);
     }
 
     @AfterEach
     void tearDown() {
-        popupaltor.cleanup(Genre.class);
+        populator.cleanup(Genre.class);
     }
 
     @Test
