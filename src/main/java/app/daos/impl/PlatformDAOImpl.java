@@ -71,7 +71,11 @@ public class PlatformDAOImpl implements IDAO<Platform, Long> {
             }
 
             em.getTransaction().begin();
-            em.merge(platform);
+
+            if (platform.getName() != null) {
+                foundPlatform.setName(platform.getName());
+            }
+
             em.getTransaction().commit();
             return foundPlatform;
         }
