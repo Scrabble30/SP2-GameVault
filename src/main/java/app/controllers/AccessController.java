@@ -1,8 +1,8 @@
 package app.controllers;
 
+import app.dtos.UserDTO;
 import app.enums.AppRouteRole;
 import app.exceptions.APIException;
-import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import io.javalin.http.HandlerType;
 import io.javalin.http.HttpStatus;
