@@ -2,10 +2,7 @@ package app.daos.impl;
 
 import app.daos.IDAO;
 import app.entities.Genre;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +27,12 @@ public class GenreDAOImpl implements IDAO<Genre, Long> {
     @Override
     public Genre create(Genre genre) {
         try (EntityManager em = emf.createEntityManager()) {
+            Genre foundGenre = em.find(Genre.class, genre.getId());
+
+            if (foundGenre != null) {
+                throw new EntityExistsException(String.format("Genre with id %d already exists", genre.getId()));
+            }
+
             em.getTransaction().begin();
             em.persist(genre);
             em.getTransaction().commit();
