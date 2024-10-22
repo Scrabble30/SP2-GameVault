@@ -4,8 +4,8 @@ import app.dtos.GameDTO;
 import app.dtos.GenreDTO;
 import app.dtos.ParentPlatFormDTO;
 import app.dtos.PlatformDTO;
+import app.services.GameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,14 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameServiceImplTest {
 
-    private static GameServiceImpl gameService;
+    private static GameService gameService;
     private GameDTO gameDTO;
 
     @BeforeAll
     static void beforeAll() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
         gameService = new GameServiceImpl(objectMapper);
     }
 
@@ -129,7 +127,6 @@ class GameServiceImplTest {
 
         assertNotNull(actualGameDTO);
         assertThat(actualGameDTO.getId(), is(expectedId));
-        assertThat(actualGameDTO.getDescription(), equalTo(expectedGameDTO.getDescription()));
-        assertThat(actualGameDTO.toString(), equalTo(expectedGameDTO.toString()));
+        assertThat(actualGameDTO, equalTo(expectedGameDTO));
     }
 }
