@@ -18,7 +18,9 @@ public class Genre {
     @Basic(optional = false)
     @Column(unique = true, nullable = false)
     private Long id;
+
     @Basic(optional = false)
     @Column(nullable = false)
     private String name;
+
 }
