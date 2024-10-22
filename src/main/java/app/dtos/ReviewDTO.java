@@ -10,7 +10,7 @@ import lombok.*;
 public class ReviewDTO {
 
     private Long id;
-    private Long userId;
+    private String username;
     private Long gameId;
     private Double rating;
     private String review;
