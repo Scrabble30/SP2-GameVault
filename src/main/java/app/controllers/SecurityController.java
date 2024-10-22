@@ -1,17 +1,17 @@
 package app.controllers;
 
 import app.daos.SecurityDAO;
+import app.dtos.UserDTO;
 import app.entities.Role;
 import app.entities.User;
 import app.exceptions.APIException;
 import app.exceptions.PasswordValidationException;
+import app.exceptions.TokenCreationException;
+import app.exceptions.TokenValidationException;
+import app.security.ITokenSecurity;
+import app.security.TokenSecurity;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nimbusds.jose.JOSEException;
-import dk.bugelhartmann.ITokenSecurity;
-import dk.bugelhartmann.TokenCreationException;
-import dk.bugelhartmann.TokenSecurity;
-import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.validation.ValidationException;
@@ -21,7 +21,6 @@ import jakarta.persistence.EntityNotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -65,10 +64,10 @@ public class SecurityController {
 
             ctx.status(HttpStatus.OK);
             ctx.json(responseJson);
-        } catch (EntityNotFoundException e) {
-            throw new APIException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (ValidationException e) {
             throw new APIException(HttpStatus.BAD_REQUEST, e.getErrors().toString());
+        } catch (EntityNotFoundException e) {
+            throw new APIException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (PasswordValidationException e) {
             throw new APIException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (IOException | TokenCreationException e) {
@@ -97,10 +96,10 @@ public class SecurityController {
 
             ctx.status(HttpStatus.CREATED);
             ctx.json(responseJson);
-        } catch (EntityExistsException e) {
-            throw new APIException(HttpStatus.CONFLICT, e.getMessage());
         } catch (ValidationException e) {
             throw new APIException(HttpStatus.BAD_REQUEST, e.getErrors().toString());
+        } catch (EntityExistsException e) {
+            throw new APIException(HttpStatus.CONFLICT, e.getMessage());
         } catch (IOException | TokenCreationException e) {
             throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -119,13 +118,11 @@ public class SecurityController {
         String token = authorization.substring("Bearer ".length());
 
         try {
-            return verifyToken(token);
-        } catch (APIException e) {
-            throw new APIException(e.getStatusCode(), e.getMessage());
+            return validateToken(token);
+        } catch (TokenValidationException e) {
+            throw new APIException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (IOException e) {
             throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        } catch (Exception e) {
-            throw new APIException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -146,25 +143,14 @@ public class SecurityController {
             SECRET_KEY = properties.getProperty("SECRET_KEY");
         }
 
-        return tokenSecurity.createToken(userDTO, ISSUER, TOKEN_EXPIRE_TIME, SECRET_KEY);
+        return tokenSecurity.createToken(userDTO, ISSUER, Long.parseLong(TOKEN_EXPIRE_TIME), SECRET_KEY);
     }
 
-    public UserDTO verifyToken(String token) throws IOException {
+    public UserDTO validateToken(String token) throws IOException, TokenValidationException {
         boolean IS_DEPLOYED = (System.getenv("DEPLOYED") != null);
-        String SECRET = IS_DEPLOYED ? System.getenv("SECRET_KEY") : getProperties("config.properties").getProperty("SECRET_KEY");
+        String SECRET_KEY = IS_DEPLOYED ? System.getenv("SECRET_KEY") : getProperties("config.properties").getProperty("SECRET_KEY");
 
-        try {
-            if (!tokenSecurity.tokenIsValid(token, SECRET)) {
-                throw new APIException(HttpStatus.UNAUTHORIZED, "Invalid token");
-            }
-            if (!tokenSecurity.tokenNotExpired(token)) {
-                throw new APIException(HttpStatus.UNAUTHORIZED, "Expired token");
-            }
-
-            return tokenSecurity.getUserWithRolesFromToken(token);
-        } catch (ParseException | JOSEException e) {
-            throw new APIException(HttpStatus.UNAUTHORIZED, "Token could not be verified");
-        }
+        return tokenSecurity.validateToken(token, SECRET_KEY);
     }
 
     private Properties getProperties(String resourceName) throws IOException {
