@@ -9,7 +9,6 @@ Here you can search for classic favorites, latest releases or explore and find h
 - Lombok
 - Hibernate
 - Javalin
-- Token Security
 - JBCrypt
 - Logback
 - JUnit5
