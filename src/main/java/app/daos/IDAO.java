@@ -2,15 +2,15 @@ package app.daos;
 
 import java.util.Set;
 
-public interface IDAO<T> {
+public interface IDAO<T, I> {
 
     T create(T t);
 
-    T getById(Integer id);
+    T getById(I id);
 
     Set<T> getAll();
 
-    T update(T t);
+    T update(I id, T t);
 
-    void delete(Integer id);
+    void delete(I id);
 }
