@@ -37,7 +37,7 @@ class GameServiceImplTest {
         Set<ParentPlatFormDTO> parentPlatFormDTOSet = new HashSet<>();
         parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(1L, "PC")));
         parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(2L, "PlayStation")));
-        parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(4L, "IOS")));
+        parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(4L, "iOS")));
         parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(8L, "Android")));
 
         Set<GenreDTO> genreDTOSet = new HashSet<>();
@@ -130,6 +130,6 @@ class GameServiceImplTest {
         assertNotNull(actualGameDTO);
         assertThat(actualGameDTO.getId(), is(expectedId));
         assertThat(actualGameDTO.getDescription(), equalTo(expectedGameDTO.getDescription()));
-        //assertThat(actualGameDTO.toString(), equalTo(expectedGameDTO.toString())); //Fails - has a trailing newline??
+        assertThat(actualGameDTO.toString(), equalTo(expectedGameDTO.toString()));
     }
 }
