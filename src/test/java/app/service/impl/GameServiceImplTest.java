@@ -110,10 +110,16 @@ class GameServiceImplTest {
         int expectedSize = 25;
 
         Set<GameDTO> allGames = gameService.getAllGames();
+
+        assertThat(allGames, notNullValue());
+
         Set<GameDTO> allGamesWithDetails = gameService.getAllGamesWithDetails(allGames);
+
+        assertThat(allGamesWithDetails, notNullValue());
+        assertThat(allGamesWithDetails.size(), is(expectedSize));
+
         Optional<GameDTO> gameDTOWithDetails = allGamesWithDetails.stream().findFirst();
 
-        assertThat(allGamesWithDetails.size(), is(expectedSize));
         assertThat(gameDTOWithDetails.isPresent(), is(true));
         gameDTOWithDetails.ifPresent(game ->
                 assertThat(game.getDescription(), notNullValue())

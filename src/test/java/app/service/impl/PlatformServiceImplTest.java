@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 class PlatformServiceImplTest {
 
@@ -53,7 +52,8 @@ class PlatformServiceImplTest {
         Set<PlatformDTO> expected = new HashSet<>(platformDTOList);
         Set<PlatformDTO> actual = platformService.getPlatforms();
 
-        assertThat(actual.size(), equalTo(expected.size()));
+        assertThat(actual, notNullValue());
+        assertThat(actual.size(), is(expected.size()));
         assertThat(actual, containsInAnyOrder(expected.toArray()));
     }
 }
