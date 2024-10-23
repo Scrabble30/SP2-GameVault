@@ -1,8 +1,8 @@
 package app.controller;
 
 import app.dto.HttpMessageDTO;
-import app.exception.APIException;
 import io.javalin.http.Context;
+import io.javalin.http.HttpResponseException;
 import io.javalin.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +11,15 @@ public class ExceptionController {
 
     private final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
-    public void handleAPIExceptions(APIException e, Context ctx) {
-        logger.error("{} - {}", HttpStatus.forStatus(e.getStatusCode()), e.getMessage());
+    public void handleHttpResponseExceptions(HttpResponseException e, Context ctx) {
+        if (!e.getDetails().isEmpty()) {
+            logger.error("{} - {} {}", HttpStatus.forStatus(e.getStatus()), e.getMessage(), e.getDetails());
+        } else {
+            logger.error("{} - {}", HttpStatus.forStatus(e.getStatus()), e.getMessage());
+        }
 
-        ctx.status(e.getStatusCode());
-        ctx.json(new HttpMessageDTO(e.getStatusCode(), e.getMessage()));
+        ctx.status(e.getStatus());
+        ctx.json(new HttpMessageDTO(e.getStatus(), e.getMessage()));
     }
 
     public void handleExceptions(Exception e, Context ctx) {
