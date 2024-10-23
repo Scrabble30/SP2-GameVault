@@ -72,7 +72,8 @@ public class Populator {
                         20,
                         "Description for Game 11",
                         Set.of(platforms.get(0)),
-                        Set.of(genres.get(0))),
+                        Set.of(genres.get(0))
+                ),
                 new Game(
                         12L,
                         "Game Title 12",
@@ -82,7 +83,8 @@ public class Populator {
                         15,
                         "Description for Game 12",
                         Set.of(platforms.get(1)),
-                        Set.of(genres.get(1))),
+                        Set.of(genres.get(1))
+                ),
                 new Game(
                         13L,
                         "Game Title 13",
@@ -92,7 +94,8 @@ public class Populator {
                         25,
                         "Description for Game 13",
                         Set.of(platforms.get(2)),
-                        Set.of(genres.get(2))),
+                        Set.of(genres.get(2))
+                ),
                 new Game(
                         14L,
                         "Game Title 14",
@@ -102,7 +105,8 @@ public class Populator {
                         30,
                         "Description for Game 14",
                         Set.of(platforms.get(3)),
-                        Set.of(genres.get(3))),
+                        Set.of(genres.get(3))
+                ),
                 new Game(
                         15L,
                         "Game Title 15",
@@ -112,7 +116,8 @@ public class Populator {
                         18,
                         "Description for Game 15",
                         Set.of(platforms.get(4)),
-                        Set.of(genres.get(4)))
+                        Set.of(genres.get(4))
+                )
         );
     }
 
