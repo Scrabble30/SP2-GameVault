@@ -2,6 +2,7 @@ package app.config;
 
 import app.controller.AccessController;
 import app.controller.ExceptionController;
+import app.enums.AppRouteRole;
 import app.route.Routes;
 import app.route.SecurityRoutes;
 import io.javalin.Javalin;
@@ -20,7 +21,7 @@ public class AppConfig {
         config.router.contextPath = "/api";
         config.http.defaultContentType = "application/json";
 
-        config.bundledPlugins.enableRouteOverview("/routes");
+        config.bundledPlugins.enableRouteOverview("/routes", AppRouteRole.ANYONE);
         config.bundledPlugins.enableDevLogging();
 
         config.router.apiBuilder(securityRoutes.getSecurityRoutes());
