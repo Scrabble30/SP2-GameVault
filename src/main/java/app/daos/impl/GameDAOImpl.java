@@ -1,18 +1,14 @@
 package app.daos.impl;
 
-import app.daos.IDAO;
+import app.daos.AbstractDAO;
 import app.entities.Game;
 import jakarta.persistence.*;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-public class GameDAOImpl implements IDAO<Game, Long> {
+public class GameDAOImpl extends AbstractDAO<Game, Long> {
     private static GameDAOImpl instance;
-    private final EntityManagerFactory emf;
 
     private GameDAOImpl(EntityManagerFactory emf) {
-        this.emf = emf;
+        super(emf, Game.class);
     }
 
     public static GameDAOImpl getInstance(EntityManagerFactory emf) {
@@ -37,28 +33,6 @@ public class GameDAOImpl implements IDAO<Game, Long> {
             em.getTransaction().commit();
 
             return game;
-        }
-    }
-
-    @Override
-    public Game getById(Long id) {
-        try (EntityManager em = emf.createEntityManager()) {
-            Game foundGame = em.find(Game.class, id);
-
-            if (foundGame == null) {
-                throw new EntityNotFoundException(String.format("Game with id %d could not be found", id));
-            }
-
-            return foundGame;
-        }
-    }
-
-    @Override
-    public Set<Game> getAll() {
-        try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Game> query = em.createNamedQuery("Game.getAll", Game.class);
-
-            return query.getResultStream().collect(Collectors.toSet());
         }
     }
 
@@ -93,21 +67,6 @@ public class GameDAOImpl implements IDAO<Game, Long> {
             em.getTransaction().commit();
 
             return foundGame;
-        }
-    }
-
-    @Override
-    public void delete(Long id) {
-        try (EntityManager em = emf.createEntityManager()) {
-            Game foundGame = em.find(Game.class, id);
-
-            if (foundGame == null) {
-                throw new EntityNotFoundException(String.format("Game with id %d does not exist", id));
-            }
-
-            em.getTransaction().begin();
-            em.remove(foundGame);
-            em.getTransaction().commit();
         }
     }
 }

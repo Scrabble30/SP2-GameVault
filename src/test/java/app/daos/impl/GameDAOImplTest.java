@@ -93,7 +93,7 @@ class GameDAOImplTest {
         Set<Game> actualGames = gameDAO.getAll();
 
         assertThat(actualGames.size(), is(expectedGames.size()));
-        assertThat(actualGames, containsInAnyOrder(expectedGames));
+        assertThat(actualGames, containsInAnyOrder(expectedGames.toArray()));
     }
 
     @Test
