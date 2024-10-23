@@ -36,7 +36,7 @@ public class Game {
     private String backgroundImageURL;
 
     @Column(name = "meta_critic_score")
-    private Double metaCriticScore;
+    private Integer metaCriticScore;
 
     private Integer playtime;
 

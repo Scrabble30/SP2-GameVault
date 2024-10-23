@@ -23,6 +23,7 @@ class GameDAOImplTest {
 
     private static Populator populator;
     private static GameDAOImpl gameDAO;
+
     private List<Genre> genres;
     private List<Platform> platforms;
     private List<Game> games;
@@ -56,17 +57,14 @@ class GameDAOImplTest {
 
     @Test
     void create() {
-        List<Game> sortedGames = games.stream()
-                .sorted(Comparator.comparing(Game::getId))
-                .toList();
+        Game lastGame = games.stream().max(Comparator.comparing(Game::getId)).orElseThrow();
 
-        Long lastId = sortedGames.get(sortedGames.size() - 1).getId();
         Game expectedGame = Game.builder()
-                .id(lastId + 1)
+                .id(lastGame.getId() + 1)
                 .title("This is a new game")
                 .releaseDate(LocalDate.of(2024, 10, 22))
                 .backgroundImageURL("https://example.com/imageOfNewGame.jpg")
-                .metaCriticScore(70.5)
+                .metaCriticScore(70)
                 .playtime(30)
                 .description("Description for the new game")
                 .platformSet(Set.of(platforms.get(3)))
@@ -85,6 +83,7 @@ class GameDAOImplTest {
         Game actualGame = gameDAO.getById(expectedGame.getId());
 
         assertThat(actualGame.getId(), is(expectedGame.getId()));
+        assertThat(actualGame, is(expectedGame));
     }
 
     @Test
@@ -93,9 +92,8 @@ class GameDAOImplTest {
 
         Set<Game> actualGames = gameDAO.getAll();
 
-        assertNotNull(actualGames);
         assertThat(actualGames.size(), is(expectedGames.size()));
-        assertThat(actualGames, is(expectedGames));
+        assertThat(actualGames, containsInAnyOrder(expectedGames));
     }
 
     @Test
