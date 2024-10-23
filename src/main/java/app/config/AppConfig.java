@@ -17,7 +17,7 @@ public class AppConfig {
     private static Routes routes;
 
     private static void configuration(JavalinConfig config) {
-        config.router.contextPath = "/api/v1";
+        config.router.contextPath = "/api";
         config.http.defaultContentType = "application/json";
 
         config.bundledPlugins.enableRouteOverview("/routes");
@@ -46,6 +46,7 @@ public class AppConfig {
 
         Javalin app = Javalin.create(AppConfig::configuration);
         handleExceptions(app);
+        handleAccess(app);
         app.start(port);
 
         return app;
