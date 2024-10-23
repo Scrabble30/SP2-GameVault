@@ -34,6 +34,12 @@ public class GameDTO {
 
     private String description;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Double rating;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Integer ratingCount;
+
     @JsonProperty("parent_platforms")
     private Set<ParentPlatFormDTO> parentPlatformDTOSet;
 
