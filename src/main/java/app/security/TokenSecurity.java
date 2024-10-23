@@ -1,8 +1,8 @@
 package app.security;
 
-import app.dtos.UserDTO;
-import app.exceptions.TokenCreationException;
-import app.exceptions.TokenValidationException;
+import app.dto.UserDTO;
+import app.exception.TokenCreationException;
+import app.exception.TokenValidationException;
 
 public interface TokenSecurity {
 

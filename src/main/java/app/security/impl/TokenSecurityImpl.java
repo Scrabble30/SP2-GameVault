@@ -1,8 +1,8 @@
 package app.security.impl;
 
-import app.dtos.UserDTO;
-import app.exceptions.TokenCreationException;
-import app.exceptions.TokenValidationException;
+import app.dto.UserDTO;
+import app.exception.TokenCreationException;
+import app.exception.TokenValidationException;
 import app.security.TokenSecurity;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;

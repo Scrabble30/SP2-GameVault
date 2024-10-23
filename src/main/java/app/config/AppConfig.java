@@ -1,10 +1,10 @@
 package app.config;
 
-import app.controllers.AccessController;
-import app.controllers.ExceptionController;
-import app.exceptions.APIException;
-import app.routes.Routes;
-import app.routes.SecurityRoutes;
+import app.controller.AccessController;
+import app.controller.ExceptionController;
+import app.exception.APIException;
+import app.route.Routes;
+import app.route.SecurityRoutes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
 import jakarta.persistence.EntityManagerFactory;
