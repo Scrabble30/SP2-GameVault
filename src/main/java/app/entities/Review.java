@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NamedQueries({
+        @NamedQuery(name = "Review.getByGameId", query = "SELECT r FROM Review r WHERE r.gameId = :gameId"),
         @NamedQuery(name = "Review.getAll", query = "SELECT r FROM Review r"),
         @NamedQuery(name = "Review.getAverageRating", query = "SELECT AVG(r.rating) FROM Review r WHERE r.gameId = :gameId"),
         @NamedQuery(name = "Review.getRatingCount", query = "SELECT COUNT(r) FROM Review r WHERE r.gameId = :gameId")

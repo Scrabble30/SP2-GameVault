@@ -9,6 +9,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TypedQuery;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class ReviewDAOImpl extends AbstractDAO<Review, Long> {
 
     private static ReviewDAOImpl instance;
@@ -55,6 +58,15 @@ public class ReviewDAOImpl extends AbstractDAO<Review, Long> {
 
             em.getTransaction().commit();
             return review;
+        }
+    }
+
+    public Set<Review> getByGameId(Long gameId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<Review> query = em.createNamedQuery("Review.getByGameId", Review.class);
+            query.setParameter("gameId", gameId);
+
+            return query.getResultStream().collect(Collectors.toSet());
         }
     }
 

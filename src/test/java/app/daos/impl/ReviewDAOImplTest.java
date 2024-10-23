@@ -110,6 +110,17 @@ class ReviewDAOImplTest {
     }
 
     @Test
+    void getByGameId() {
+        Game game = games.get(0);
+
+        Set<Review> expected = reviews.stream().filter(review -> Objects.equals(review.getGameId(), game.getId())).collect(Collectors.toSet());
+        Set<Review> actual = reviewDAO.getByGameId(game.getId());
+
+        assertThat(actual.size(), is(expected.size()));
+        assertThat(actual, containsInAnyOrder(expected.toArray()));
+    }
+
+    @Test
     void getAll() {
         Set<Review> expected = new HashSet<>(reviews);
         Set<Review> actual = reviewDAO.getAll();
