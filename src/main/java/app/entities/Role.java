@@ -18,6 +18,7 @@ public class Role {
     @Basic(optional = false)
     @Column(unique = true, nullable = false)
     private String name;
+
     @ManyToMany
     private Set<User> users;
 

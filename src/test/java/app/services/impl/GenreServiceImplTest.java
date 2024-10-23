@@ -1,7 +1,7 @@
-package app.services;
+package app.services.impl;
 
 import app.dtos.GenreDTO;
-import app.services.impl.GenreServiceImpl;
+import app.services.GenreService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 
-class GenreServiceTest {
+class GenreServiceImplTest {
 
     private static GenreService genreService;
 
