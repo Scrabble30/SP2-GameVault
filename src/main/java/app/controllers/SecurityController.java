@@ -8,8 +8,8 @@ import app.exceptions.APIException;
 import app.exceptions.PasswordValidationException;
 import app.exceptions.TokenCreationException;
 import app.exceptions.TokenValidationException;
-import app.security.ITokenSecurity;
 import app.security.TokenSecurity;
+import app.security.impl.TokenSecurityImpl;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.javalin.http.Context;
@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
 public class SecurityController {
 
     private static SecurityController instance;
-    private final ITokenSecurity tokenSecurity;
+    private final TokenSecurity tokenSecurity;
     private final SecurityDAO securityDAO;
 
     private SecurityController(EntityManagerFactory emf) {
-        this.tokenSecurity = new TokenSecurity();
+        this.tokenSecurity = new TokenSecurityImpl();
         this.securityDAO = SecurityDAO.getInstance(emf);
     }
 
