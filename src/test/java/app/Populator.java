@@ -1,11 +1,14 @@
 package app;
 
+import app.entities.Game;
 import app.entities.Genre;
 import app.entities.Platform;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public class Populator {
 
@@ -55,6 +58,66 @@ public class Populator {
                 new Platform(12L, "3DO"),
                 new Platform(13L, "Neo Geo"),
                 new Platform(14L, "Web")
+        );
+    }
+
+    public List<Game> createGames(List<Genre> genres, List<Platform> platforms) {
+        return List.of(
+                new Game(
+                        11L,
+                        "Game Title 11",
+                        LocalDate.of(2023, 10, 22),
+                        "https://example.com/image11.jpg",
+                        85,
+                        20,
+                        "Description for Game 11",
+                        Set.of(platforms.get(0)),
+                        Set.of(genres.get(0))
+                ),
+                new Game(
+                        12L,
+                        "Game Title 12",
+                        LocalDate.of(2024, 1, 15),
+                        "https://example.com/image12.jpg",
+                        90,
+                        15,
+                        "Description for Game 12",
+                        Set.of(platforms.get(1)),
+                        Set.of(genres.get(1))
+                ),
+                new Game(
+                        13L,
+                        "Game Title 13",
+                        LocalDate.of(2024, 3, 10),
+                        "https://example.com/image13.jpg",
+                        78,
+                        25,
+                        "Description for Game 13",
+                        Set.of(platforms.get(2)),
+                        Set.of(genres.get(2))
+                ),
+                new Game(
+                        14L,
+                        "Game Title 14",
+                        LocalDate.of(2024, 5, 5),
+                        "https://example.com/image14.jpg",
+                        92,
+                        30,
+                        "Description for Game 14",
+                        Set.of(platforms.get(3)),
+                        Set.of(genres.get(3))
+                ),
+                new Game(
+                        15L,
+                        "Game Title 15",
+                        LocalDate.of(2024, 7, 12),
+                        "https://example.com/image15.jpg",
+                        75,
+                        18,
+                        "Description for Game 15",
+                        Set.of(platforms.get(4)),
+                        Set.of(genres.get(4))
+                )
         );
     }
 
