@@ -2,10 +2,9 @@ package app.controller;
 
 import app.dto.UserDTO;
 import app.enums.AppRouteRole;
-import app.exception.APIException;
 import io.javalin.http.Context;
+import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.HandlerType;
-import io.javalin.http.HttpStatus;
 import io.javalin.security.RouteRole;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -34,7 +33,7 @@ public class AccessController {
         Set<String> allowedRoles = ctx.routeRoles().stream().map(RouteRole::toString).collect(Collectors.toSet());
 
         if (allowedRoles.stream().noneMatch(userRoles::contains)) {
-            throw new APIException(HttpStatus.FORBIDDEN, String.format("Unauthorized with user roles: %s. Needed Roles: %s", userRoles, allowedRoles));
+            throw new ForbiddenResponse(String.format("Unauthorized with user roles: %s. Needed Roles: %s", userRoles, allowedRoles));
         }
     }
 }

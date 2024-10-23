@@ -4,7 +4,6 @@ import app.dao.SecurityDAO;
 import app.dto.UserDTO;
 import app.entity.Role;
 import app.entity.User;
-import app.exception.APIException;
 import app.exception.PasswordValidationException;
 import app.exception.TokenCreationException;
 import app.exception.TokenValidationException;
@@ -12,8 +11,7 @@ import app.security.TokenSecurity;
 import app.security.impl.TokenSecurityImpl;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.javalin.http.Context;
-import io.javalin.http.HttpStatus;
+import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManagerFactory;
@@ -65,13 +63,13 @@ public class SecurityController {
             ctx.status(HttpStatus.OK);
             ctx.json(responseJson);
         } catch (ValidationException e) {
-            throw new APIException(HttpStatus.BAD_REQUEST, e.getErrors().toString());
+            throw new BadRequestResponse(e.getErrors().toString());
         } catch (EntityNotFoundException e) {
-            throw new APIException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new NotFoundResponse(e.getMessage());
         } catch (PasswordValidationException e) {
-            throw new APIException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new UnauthorizedResponse(e.getMessage());
         } catch (IOException | TokenCreationException e) {
-            throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new InternalServerErrorResponse(e.getMessage());
         }
     }
 
@@ -97,11 +95,11 @@ public class SecurityController {
             ctx.status(HttpStatus.CREATED);
             ctx.json(responseJson);
         } catch (ValidationException e) {
-            throw new APIException(HttpStatus.BAD_REQUEST, e.getErrors().toString());
+            throw new BadRequestResponse(e.getErrors().toString());
         } catch (EntityExistsException e) {
-            throw new APIException(HttpStatus.CONFLICT, e.getMessage());
+            throw new ConflictResponse(e.getMessage());
         } catch (IOException | TokenCreationException e) {
-            throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new InternalServerErrorResponse(e.getMessage());
         }
     }
 
@@ -109,10 +107,10 @@ public class SecurityController {
         String authorization = ctx.header("Authorization");
 
         if (authorization == null) {
-            throw new APIException(HttpStatus.UNAUTHORIZED, "Missing Authorization header");
+            throw new UnauthorizedResponse("Missing Authorization header");
         }
         if (!authorization.contains("Bearer")) {
-            throw new APIException(HttpStatus.UNAUTHORIZED, "Invalid Authorization header");
+            throw new UnauthorizedResponse("Invalid Authorization header");
         }
 
         String token = authorization.substring("Bearer ".length());
@@ -120,9 +118,9 @@ public class SecurityController {
         try {
             return validateToken(token);
         } catch (TokenValidationException e) {
-            throw new APIException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new UnauthorizedResponse(e.getMessage());
         } catch (IOException e) {
-            throw new APIException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            throw new InternalServerErrorResponse(e.getMessage());
         }
     }
 

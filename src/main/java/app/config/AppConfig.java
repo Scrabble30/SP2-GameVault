@@ -2,11 +2,11 @@ package app.config;
 
 import app.controller.AccessController;
 import app.controller.ExceptionController;
-import app.exception.APIException;
 import app.route.Routes;
 import app.route.SecurityRoutes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
+import io.javalin.http.HttpResponseException;
 import jakarta.persistence.EntityManagerFactory;
 
 public class AppConfig {
@@ -29,7 +29,7 @@ public class AppConfig {
     }
 
     public static void handleExceptions(Javalin app) {
-        app.exception(APIException.class, exceptionController::handleAPIExceptions);
+        app.exception(HttpResponseException.class, exceptionController::handleHttpResponseExceptions);
         app.exception(Exception.class, exceptionController::handleExceptions);
     }
 
