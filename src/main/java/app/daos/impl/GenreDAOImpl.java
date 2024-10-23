@@ -48,7 +48,7 @@ public class GenreDAOImpl extends AbstractDAO<Genre, Long> {
 
             em.getTransaction().begin();
 
-            if (foundGenre.getName() != null) {
+            if (genre.getName() != null) {
                 foundGenre.setName(genre.getName());
             }
 

@@ -45,7 +45,7 @@ public class Game {
     private Double rating;
 
     @Column(name = "rating_count")
-    private Integer ratingCount;
+    private Long ratingCount;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
