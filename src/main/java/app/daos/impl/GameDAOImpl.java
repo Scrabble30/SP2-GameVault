@@ -35,29 +35,33 @@ public class GameDAOImpl extends AbstractDAO<Game, Long> {
 
             if (game.getGenreSet() != null) {
                 Set<Genre> genreSet = new HashSet<>();
+
                 game.getGenreSet().forEach(genre -> {
                     Genre foundGenre = em.find(Genre.class, genre.getId());
 
                     if (foundGenre != null) {
                         genreSet.add(foundGenre);
                     } else {
-                        throw new EntityNotFoundException("Genre does not exist.");
+                        throw new EntityNotFoundException(String.format("Genre with id %d does not exist.", genre.getId()));
                     }
                 });
+
                 game.setGenreSet(genreSet);
             }
 
             if (game.getPlatformSet() != null) {
                 Set<Platform> platformSet = new HashSet<>();
+
                 game.getPlatformSet().forEach(platform -> {
                     Platform foundPlatform = em.find(Platform.class, platform.getId());
 
                     if (foundPlatform != null) {
                         platformSet.add(foundPlatform);
                     } else {
-                        throw new EntityNotFoundException("Platform does not exist.");
+                        throw new EntityNotFoundException(String.format("Platform with id %d does not exist.", platform.getId()));
                     }
                 });
+
                 game.setPlatformSet(platformSet);
             }
 
