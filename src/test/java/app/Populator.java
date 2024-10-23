@@ -71,6 +71,8 @@ public class Populator {
                         85,
                         20,
                         "Description for Game 11",
+                        null,
+                        null,
                         Set.of(platforms.get(0)),
                         Set.of(genres.get(0))
                 ),
@@ -82,6 +84,8 @@ public class Populator {
                         90,
                         15,
                         "Description for Game 12",
+                        null,
+                        null,
                         Set.of(platforms.get(1)),
                         Set.of(genres.get(1))
                 ),
@@ -93,6 +97,8 @@ public class Populator {
                         78,
                         25,
                         "Description for Game 13",
+                        null,
+                        null,
                         Set.of(platforms.get(2)),
                         Set.of(genres.get(2))
                 ),
@@ -104,6 +110,8 @@ public class Populator {
                         92,
                         30,
                         "Description for Game 14",
+                        null,
+                        null,
                         Set.of(platforms.get(3)),
                         Set.of(genres.get(3))
                 ),
@@ -115,6 +123,8 @@ public class Populator {
                         75,
                         18,
                         "Description for Game 15",
+                        null,
+                        null,
                         Set.of(platforms.get(4)),
                         Set.of(genres.get(4))
                 )

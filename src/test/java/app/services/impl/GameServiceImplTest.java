@@ -85,9 +85,11 @@ class GameServiceImplTest {
                 "Angry Birds",
                 LocalDate.of(2009, 12, 11),
                 "https://media.rawg.io/media/games/fc8/fc839beb76bd63c2a5b176c46bdb7681.jpg",
-                80.0,
+                80,
                 4,
                 description,
+                null,
+                null,
                 parentPlatFormDTOSet,
                 genreDTOSet
         );
