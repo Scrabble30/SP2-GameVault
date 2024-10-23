@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,7 @@ class GenreDAOImplTest {
 
     @Test
     void create() {
-        Genre lastGenre = genres.get(genres.size() - 1);
+        Genre lastGenre = genres.stream().max(Comparator.comparing(Genre::getId)).orElseThrow();
         Genre expected = Genre.builder()
                 .id(lastGenre.getId() + 1)
                 .name("New Genre")
