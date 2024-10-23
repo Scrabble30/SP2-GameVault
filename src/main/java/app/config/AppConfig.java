@@ -1,12 +1,13 @@
 package app.config;
 
-import app.controllers.AccessController;
-import app.controllers.ExceptionController;
-import app.exceptions.APIException;
-import app.routes.Routes;
-import app.routes.SecurityRoutes;
+import app.controller.AccessController;
+import app.controller.ExceptionController;
+import app.enums.AppRouteRole;
+import app.route.Routes;
+import app.route.SecurityRoutes;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
+import io.javalin.http.HttpResponseException;
 import jakarta.persistence.EntityManagerFactory;
 
 public class AppConfig {
@@ -17,10 +18,10 @@ public class AppConfig {
     private static Routes routes;
 
     private static void configuration(JavalinConfig config) {
-        config.router.contextPath = "/api/v1";
+        config.router.contextPath = "/api";
         config.http.defaultContentType = "application/json";
 
-        config.bundledPlugins.enableRouteOverview("/routes");
+        config.bundledPlugins.enableRouteOverview("/routes", AppRouteRole.ANYONE);
         config.bundledPlugins.enableDevLogging();
 
         config.router.apiBuilder(securityRoutes.getSecurityRoutes());
@@ -29,7 +30,7 @@ public class AppConfig {
     }
 
     public static void handleExceptions(Javalin app) {
-        app.exception(APIException.class, exceptionController::handleAPIExceptions);
+        app.exception(HttpResponseException.class, exceptionController::handleHttpResponseExceptions);
         app.exception(Exception.class, exceptionController::handleExceptions);
     }
 
@@ -46,6 +47,7 @@ public class AppConfig {
 
         Javalin app = Javalin.create(AppConfig::configuration);
         handleExceptions(app);
+        handleAccess(app);
         app.start(port);
 
         return app;
