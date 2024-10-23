@@ -34,10 +34,10 @@ public class GameDTO {
 
     private String description;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Double rating;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer ratingCount;
 
     @JsonProperty("parent_platforms")
