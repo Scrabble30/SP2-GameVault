@@ -57,6 +57,7 @@ public class ReviewDAOImpl extends AbstractDAO<Review, Long> {
             foundGame.setRatingCount(countQuery.getSingleResult());
 
             em.getTransaction().commit();
+
             return review;
         }
     }
@@ -100,6 +101,7 @@ public class ReviewDAOImpl extends AbstractDAO<Review, Long> {
             }
 
             em.getTransaction().commit();
+
             return foundReview;
         }
     }
