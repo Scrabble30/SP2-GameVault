@@ -28,7 +28,7 @@ public class GameDTO {
     private String backgroundImageURL;
 
     @JsonProperty("metacritic")
-    private Double metaCriticScore;
+    private Integer metaCriticScore;
 
     private Integer playtime;
 
