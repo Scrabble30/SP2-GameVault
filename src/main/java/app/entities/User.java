@@ -18,7 +18,9 @@ public class User {
     @Basic(optional = false)
     @Column(unique = true, nullable = false)
     private String username;
+
     private String password;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
