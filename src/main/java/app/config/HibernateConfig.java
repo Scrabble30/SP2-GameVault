@@ -40,6 +40,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Genre.class);
         configuration.addAnnotatedClass(Platform.class);
         configuration.addAnnotatedClass(Game.class);
+        configuration.addAnnotatedClass(Review.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String databaseName) {
