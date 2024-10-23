@@ -1,7 +1,7 @@
 package app.config;
 
-import app.entities.Role;
-import app.entities.User;
+import app.entity.Role;
+import app.entity.User;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
