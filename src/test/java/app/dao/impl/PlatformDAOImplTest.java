@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,7 @@ class PlatformDAOImplTest {
 
     @Test
     void create() {
-        Platform lastPlatform = platforms.get(platforms.size() - 1);
+        Platform lastPlatform = platforms.stream().max(Comparator.comparing(Platform::getId)).orElseThrow();
         Platform expected = Platform.builder()
                 .id(lastPlatform.getId() + 1)
                 .name("New Platform")
