@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
@@ -55,7 +55,7 @@ class PlatformDAOImplTest {
 
         Platform actual = platformDAO.create(expected);
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -63,7 +63,7 @@ class PlatformDAOImplTest {
         Platform expected = platforms.get(0);
         Platform actual = platformDAO.getById(expected.getId());
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -71,7 +71,7 @@ class PlatformDAOImplTest {
         Set<Platform> expected = new HashSet<>(platforms);
         Set<Platform> actual = platformDAO.getAll();
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -81,7 +81,7 @@ class PlatformDAOImplTest {
 
         Platform actual = platformDAO.update(expected.getId(), expected);
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
