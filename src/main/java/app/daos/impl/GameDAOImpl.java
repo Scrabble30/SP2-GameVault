@@ -2,7 +2,12 @@ package app.daos.impl;
 
 import app.daos.AbstractDAO;
 import app.entities.Game;
+import app.entities.Genre;
+import app.entities.Platform;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameDAOImpl extends AbstractDAO<Game, Long> {
     private static GameDAOImpl instance;
@@ -26,6 +31,34 @@ public class GameDAOImpl extends AbstractDAO<Game, Long> {
 
             if (foundGame != null) {
                 throw new EntityExistsException(String.format("Game with id %d already exists", game.getId()));
+            }
+
+            if (game.getGenreSet() != null) {
+                Set<Genre> genreSet = new HashSet<>();
+                game.getGenreSet().forEach(genre -> {
+                    Genre foundGenre = em.find(Genre.class, genre.getId());
+
+                    if (foundGenre != null) {
+                        genreSet.add(foundGenre);
+                    } else {
+                        throw new EntityNotFoundException("Genre does not exist.");
+                    }
+                });
+                game.setGenreSet(genreSet);
+            }
+
+            if (game.getPlatformSet() != null) {
+                Set<Platform> platformSet = new HashSet<>();
+                game.getPlatformSet().forEach(platform -> {
+                    Platform foundPlatform = em.find(Platform.class, platform.getId());
+
+                    if (foundPlatform != null) {
+                        platformSet.add(foundPlatform);
+                    } else {
+                        throw new EntityNotFoundException("Platform does not exist.");
+                    }
+                });
+                game.setPlatformSet(platformSet);
             }
 
             em.getTransaction().begin();
