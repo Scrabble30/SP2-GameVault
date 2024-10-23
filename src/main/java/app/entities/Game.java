@@ -26,9 +26,9 @@ public class Game {
     private Long id;
 
     @Basic(optional = false)
+    @Column(nullable = false)
     private String title;
 
-    @Basic(optional = false)
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
@@ -41,6 +41,11 @@ public class Game {
     private Integer playtime;
 
     private String description;
+
+    private Double rating;
+
+    @Column(name = "rating_count")
+    private Integer ratingCount;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
