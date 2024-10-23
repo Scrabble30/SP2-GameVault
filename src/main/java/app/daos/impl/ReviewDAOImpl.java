@@ -1,6 +1,6 @@
 package app.daos.impl;
 
-import app.daos.IDAO;
+import app.daos.AbstractDAO;
 import app.entities.Game;
 import app.entities.Review;
 import app.entities.User;
@@ -9,16 +9,12 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.TypedQuery;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-public class ReviewDAOImpl implements IDAO<Review, Long> {
+public class ReviewDAOImpl extends AbstractDAO<Review, Long> {
 
     private static ReviewDAOImpl instance;
-    private final EntityManagerFactory emf;
 
     private ReviewDAOImpl(EntityManagerFactory emf) {
-        this.emf = emf;
+        super(emf, Review.class);
     }
 
     public static ReviewDAOImpl getInstance(EntityManagerFactory emf) {
@@ -47,39 +43,18 @@ public class ReviewDAOImpl implements IDAO<Review, Long> {
             em.getTransaction().begin();
             em.persist(review);
 
-            TypedQuery<Double> averageQuery = em.createQuery("SELECT AVG(r.rating) FROM Review r WHERE r.gameId = :gameId", Double.class);
+            TypedQuery<Double> averageQuery = em.createNamedQuery("Review.getAverageRating", Double.class);
             averageQuery.setParameter("gameId", foundGame.getId());
 
             foundGame.setRating(averageQuery.getSingleResult());
 
-            TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(r) FROM Review r WHERE r.gameId = :gameId", Long.class);
+            TypedQuery<Long> countQuery = em.createNamedQuery("Review.getRatingCount", Long.class);
             countQuery.setParameter("gameId", foundGame.getId());
 
             foundGame.setRatingCount(countQuery.getSingleResult());
 
             em.getTransaction().commit();
             return review;
-        }
-    }
-
-    @Override
-    public Review getById(Long id) {
-        try (EntityManager em = emf.createEntityManager()) {
-            Review foundReview = em.find(Review.class, id);
-
-            if (foundReview == null) {
-                throw new EntityNotFoundException(String.format("Review with id %s could not be found", id));
-            }
-
-            return foundReview;
-        }
-    }
-
-    @Override
-    public Set<Review> getAll() {
-        try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Review> query = em.createQuery("SELECT r FROM Review r", Review.class);
-            return query.getResultStream().collect(Collectors.toSet());
         }
     }
 
@@ -103,7 +78,7 @@ public class ReviewDAOImpl implements IDAO<Review, Long> {
                     throw new EntityNotFoundException(String.format("Game with id %s could not be found", id));
                 }
 
-                TypedQuery<Double> averageQuery = em.createQuery("SELECT AVG(r.rating) FROM Review r WHERE r.gameId = :gameId", Double.class);
+                TypedQuery<Double> averageQuery = em.createNamedQuery("Review.getAverageRating", Double.class);
                 averageQuery.setParameter("gameId", foundGame.getId());
 
                 foundGame.setRating(averageQuery.getSingleResult());
@@ -114,21 +89,6 @@ public class ReviewDAOImpl implements IDAO<Review, Long> {
 
             em.getTransaction().commit();
             return foundReview;
-        }
-    }
-
-    @Override
-    public void delete(Long id) {
-        try (EntityManager em = emf.createEntityManager()) {
-            Review foundReview = em.find(Review.class, id);
-
-            if (foundReview == null) {
-                throw new EntityNotFoundException(String.format("Review with id %s could not be found", id));
-            }
-
-            em.getTransaction().begin();
-            em.remove(foundReview);
-            em.getTransaction().commit();
         }
     }
 }
