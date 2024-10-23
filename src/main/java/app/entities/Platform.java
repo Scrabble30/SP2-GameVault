@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Platform.getAll", query = "SELECT p FROM Platform p")
+})
 @Table(name = "platform")
 public class Platform {
 
