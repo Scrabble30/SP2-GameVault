@@ -1,0 +1,2 @@
+### A get request to get a review by id
+GET {{URL}}/reviews/1/
