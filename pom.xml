@@ -29,7 +29,6 @@
         <hamcrest.version>3.0</hamcrest.version>
         <rest-assured.version>5.5.0</rest-assured.version>
         <testcontainers.version>1.20.1</testcontainers.version>
-        <modelmapper.version>3.2.0</modelmapper.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -128,11 +127,6 @@
             <artifactId>postgresql</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.modelmapper</groupId>
-            <artifactId>modelmapper</artifactId>
-            <version>${modelmapper.version}</version>
         </dependency>
     </dependencies>
 
