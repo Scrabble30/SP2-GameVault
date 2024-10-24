@@ -2,7 +2,6 @@ package app.service.impl;
 
 import app.dto.GameDTO;
 import app.dto.GenreDTO;
-import app.dto.ParentPlatFormDTO;
 import app.dto.PlatformDTO;
 import app.service.GameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,11 +31,11 @@ class GameServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        Set<ParentPlatFormDTO> parentPlatFormDTOSet = new HashSet<>();
-        parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(1L, "PC")));
-        parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(2L, "PlayStation")));
-        parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(4L, "iOS")));
-        parentPlatFormDTOSet.add(new ParentPlatFormDTO(new PlatformDTO(8L, "Android")));
+        Set<PlatformDTO> platformDTOSet = new HashSet<>();
+        platformDTOSet.add(new PlatformDTO(1L, "PC"));
+        platformDTOSet.add(new PlatformDTO(2L, "PlayStation"));
+        platformDTOSet.add(new PlatformDTO(4L, "iOS"));
+        platformDTOSet.add(new PlatformDTO(8L, "Android"));
 
         Set<GenreDTO> genreDTOSet = new HashSet<>();
         genreDTOSet.add(new GenreDTO(4L, "Action"));
@@ -90,7 +89,7 @@ class GameServiceImplTest {
                 description,
                 null,
                 null,
-                parentPlatFormDTOSet,
+                platformDTOSet,
                 genreDTOSet
         );
     }
