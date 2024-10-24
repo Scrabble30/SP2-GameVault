@@ -1,2 +1,52 @@
+### Create a new user - this one will only get a USER role by default
+POST {{URL}}/auth/register/
+
+{
+    "username": "test",
+    "password": "test123"
+}
+
+### login as a user
+POST {{URL}}/auth/login/
+
+{
+    "username": "test",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
 ### A get request to get a review by id
-GET {{URL}}/reviews/1/
+GET {{URL}}/reviews/3/
+Authorization: Bearer {{jwt_token}}
+
+### A post request for creating a new review
+POST {{URL}}/reviews/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "username": "test",
+  "gameId": 13537,
+  "rating": 7.8,
+  "review": "A really promising game!"
+}
+
+### A put request for updating an existing review
+PUT {{URL}}/reviews/1/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "username": "test",
+  "gameId": 12020,
+  "rating": 5.5,
+  "review": "Disappointed with the ending!"
+}
+
+### A delete request for deleting an existing review
+DELETE {{URL}}/reviews/2/
+Authorization: Bearer {{jwt_token}}
