@@ -3,6 +3,7 @@ package app.dto;
 import lombok.*;
 
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
