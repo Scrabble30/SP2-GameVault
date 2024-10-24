@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
@@ -55,7 +55,7 @@ class GenreDAOImplTest {
 
         Genre actual = genreDAO.create(expected);
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -63,7 +63,7 @@ class GenreDAOImplTest {
         Genre expected = genres.get(0);
         Genre actual = genreDAO.getById(expected.getId());
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -71,7 +71,7 @@ class GenreDAOImplTest {
         Set<Genre> expected = new HashSet<>(genres);
         Set<Genre> actual = genreDAO.getAll();
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
@@ -81,7 +81,7 @@ class GenreDAOImplTest {
 
         Genre actual = genreDAO.update(expected.getId(), expected);
 
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, is(expected));
     }
 
     @Test
