@@ -43,7 +43,7 @@ public class AppConfig {
         AppConfig.accessController = new AccessController(emf);
 
         AppConfig.securityRoutes = new SecurityRoutes(emf);
-        AppConfig.routes = new Routes();
+        AppConfig.routes = new Routes(emf);
 
         Javalin app = Javalin.create(AppConfig::configuration);
         handleExceptions(app);
