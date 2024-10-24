@@ -40,6 +40,7 @@ public class Game {
 
     private Integer playtime;
 
+    @Column(length = 2500)
     private String description;
 
     private Double rating;
