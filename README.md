@@ -9,6 +9,7 @@ Here you can search for classic favorites, latest releases or explore and find h
 - Lombok
 - Hibernate
 - Javalin
+- Nimbus
 - JBCrypt
 - Logback
 - JUnit5
