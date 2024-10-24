@@ -2,8 +2,6 @@ package app.controller.impl;
 
 import app.controller.Controller;
 import app.dao.impl.ReviewDAOImpl;
-import app.dto.ReviewDTO;
-import app.entity.Review;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -16,11 +14,7 @@ public class ReviewControllerImpl implements Controller {
 
     @Override
     public void read(Context ctx) {
-        long id = ctx.pathParamAsClass("id", Long.class).get();
 
-        Review review = reviewDAO.getById(id);
-
-        //Map to dto
     }
 
     @Override
