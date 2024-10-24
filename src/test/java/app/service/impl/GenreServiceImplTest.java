@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 class GenreServiceImplTest {
 
@@ -58,7 +57,8 @@ class GenreServiceImplTest {
         Set<GenreDTO> expected = new HashSet<>(genreDTOList);
         Set<GenreDTO> actual = genreService.getGenres();
 
-        assertThat(actual.size(), equalTo(expected.size()));
+        assertThat(actual, notNullValue());
+        assertThat(actual.size(), is(expected.size()));
         assertThat(actual, containsInAnyOrder(expected.toArray()));
     }
 }
