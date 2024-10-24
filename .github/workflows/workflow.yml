@@ -20,7 +20,7 @@ jobs:
 
       - name: Build with Maven
         env:
-          DEPLOYED: ${{ DEPLOYED }}
+          DEPLOYED: ${{ secrets.DEPLOYED }}
           API_KEY: ${{ secrets.API_KEY }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ISSUER: ${{ secrets.ISSUER }}
