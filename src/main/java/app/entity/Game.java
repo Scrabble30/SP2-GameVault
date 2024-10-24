@@ -55,7 +55,6 @@ public class Game {
     )
     private Set<Platform> platformSet;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "game_genre",

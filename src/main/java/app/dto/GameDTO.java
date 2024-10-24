@@ -1,9 +1,7 @@
 package app.dto;
 
-import app.serializer.GameDTODeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonDeserialize(using = GameDTODeserializer.class)
 public class GameDTO {
 
     private Long id;
