@@ -2,15 +2,14 @@ package app.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@Getter
-@ToString
-@EqualsAndHashCode
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -37,16 +36,12 @@ public class GameDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Double rating;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "rating_count", access = JsonProperty.Access.READ_ONLY)
     private Long ratingCount;
 
-    @JsonProperty("parent_platforms")
-    private Set<ParentPlatFormDTO> parentPlatformDTOSet;
+    @JsonProperty("platforms")
+    private Set<PlatformDTO> platformDTOSet;
 
     @JsonProperty("genres")
     private Set<GenreDTO> genreDTOSet;
-
-    public Set<PlatformDTO> getPlatformDTOSet() {
-        return parentPlatformDTOSet.stream().map(parent -> new PlatformDTO(parent.getPlatformDTO().getId(), parent.getPlatformDTO().getName())).collect(Collectors.toSet());
-    }
 }

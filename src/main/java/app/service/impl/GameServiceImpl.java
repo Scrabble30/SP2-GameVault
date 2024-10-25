@@ -5,6 +5,9 @@ import app.service.GameService;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +52,11 @@ public class GameServiceImpl implements GameService {
             if (response.statusCode() == 200) {
                 JavaType classType = objectMapper.getTypeFactory().constructCollectionType(Set.class, GameDTO.class);
                 JsonNode jsonNode = objectMapper.readTree(response.body());
+                JsonNode results = jsonNode.get("results");
 
-                return objectMapper.treeToValue(jsonNode.get("results"), classType);
+                results.forEach(this::reconstructJson);
+
+                return objectMapper.treeToValue(results, classType);
             } else {
                 logger.error("GET request {} failed. Status code: {}", uri, response.statusCode());
             }
@@ -94,7 +100,7 @@ public class GameServiceImpl implements GameService {
             if (response.statusCode() == 200) {
                 JsonNode jsonNode = objectMapper.readTree(response.body());
 
-                return objectMapper.treeToValue(jsonNode, GameDTO.class);
+                return objectMapper.treeToValue(reconstructJson(jsonNode), GameDTO.class);
             } else {
                 logger.error("GET request {} failed. Status code: {}", uri, response.statusCode());
             }
@@ -103,5 +109,16 @@ public class GameServiceImpl implements GameService {
         }
 
         return null;
+    }
+
+    private JsonNode reconstructJson(JsonNode node) {
+        ObjectNode objectNode = (ObjectNode) node;
+        ArrayNode arrayNode = JsonNodeFactory.instance.arrayNode();
+
+        objectNode.get("parent_platforms").forEach(parentPlatform -> arrayNode.add(parentPlatform.get("platform")));
+        objectNode.remove("parent_platforms");
+        objectNode.set("platforms", arrayNode);
+
+        return objectNode;
     }
 }

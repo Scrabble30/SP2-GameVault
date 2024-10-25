@@ -14,6 +14,7 @@
 
         <jackson.version>2.17.2</jackson.version>
         <lombok.version>1.18.34</lombok.version>
+        <modelmapper.version>3.2.1</modelmapper.version>
 
         <hibernate.version>6.2.6.Final</hibernate.version>
         <postgresql.version>42.7.4</postgresql.version>
@@ -58,6 +59,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
         </dependency>
 
         <!--    Database    -->
