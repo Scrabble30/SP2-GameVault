@@ -26,7 +26,7 @@ public class Game {
     private Long id;
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(name = "release_date")
