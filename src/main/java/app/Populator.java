@@ -64,20 +64,20 @@ public class Populator {
         persist(platforms);
         persist(genres);
 
-        List<Role> roles = createTestRoles();
+        List<Role> roles = createRoles();
         persist(roles);
 
-        List<User> users = createTestUsers(roles);
+        List<User> users = createUsers(roles);
         persist(users);
 
-        List<Review> reviews = createTestReviews(users, games);
+        List<Review> reviews = createReviews(users, games);
         persist(reviews);
         persist(games);
 
         logger.info("Data population complete");
     }
 
-    public List<Review> createTestReviews(List<User> users, List<Game> games) {
+    public List<Review> createReviews(List<User> users, List<Game> games) {
         List<Review> reviews = List.of(
                 new Review(
                         null,
@@ -116,7 +116,7 @@ public class Populator {
         return reviews;
     }
 
-    public List<User> createTestUsers(List<Role> roles) {
+    public List<User> createUsers(List<Role> roles) {
         return List.of(
                 new User(
                         "User1",
@@ -136,7 +136,7 @@ public class Populator {
         );
     }
 
-    public List<Role> createTestRoles() {
+    public List<Role> createRoles() {
         return List.of(
                 new Role("user"),
                 new Role("admin")
