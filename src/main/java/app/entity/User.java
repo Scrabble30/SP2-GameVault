@@ -16,9 +16,10 @@ public class User {
 
     @Id
     @Basic(optional = false)
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 25)
     private String username;
-
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
