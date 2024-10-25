@@ -57,9 +57,9 @@ public class ReviewControllerImpl implements Controller {
     @Override
     public void getAll(Context ctx) {
         try {
-            Long id = ctx.queryParamAsClass("gameId", Long.class).get();
+            Long gameId = ctx.queryParamAsClass("gameId", Long.class).get();
 
-            Set<Review> foundReviewSet = reviewDAO.getByGameId(id);
+            Set<Review> foundReviewSet = reviewDAO.getByGameId(gameId);
             Set<ReviewDTO> mappedReviewDTOSet = foundReviewSet.stream().map(reviewMapper::convertToDTO).collect(Collectors.toSet());
 
             ctx.status(HttpStatus.OK);
