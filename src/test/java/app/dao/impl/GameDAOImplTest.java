@@ -1,13 +1,16 @@
 package app.dao.impl;
 
-import app.Populator;
+import app.PopulatorTestUtil;
 import app.config.HibernateConfig;
 import app.entity.Game;
 import app.entity.Genre;
 import app.entity.Platform;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -15,13 +18,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class GameDAOImplTest {
 
-    private static Populator populator;
+    private static PopulatorTestUtil populatorTestUtil;
     private static GameDAOImpl gameDAO;
 
     private List<Genre> genres;
@@ -32,27 +36,27 @@ class GameDAOImplTest {
     static void beforeAll() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-        populator = new Populator(emf);
+        populatorTestUtil = new PopulatorTestUtil(emf);
         gameDAO = GameDAOImpl.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        genres = populator.createGenres();
-        populator.persist(genres);
+        genres = populatorTestUtil.createGenres();
+        populatorTestUtil.persist(genres);
 
-        platforms = populator.createPlatforms();
-        populator.persist(platforms);
+        platforms = populatorTestUtil.createPlatforms();
+        populatorTestUtil.persist(platforms);
 
-        games = populator.createGames(genres, platforms);
-        populator.persist(games);
+        games = populatorTestUtil.createGames(genres, platforms);
+        populatorTestUtil.persist(games);
     }
 
     @AfterEach
     void tearDown() {
-        populator.cleanup(Game.class);
-        populator.cleanup(Genre.class);
-        populator.cleanup(Platform.class);
+        populatorTestUtil.cleanup(Game.class);
+        populatorTestUtil.cleanup(Genre.class);
+        populatorTestUtil.cleanup(Platform.class);
     }
 
     @Test
