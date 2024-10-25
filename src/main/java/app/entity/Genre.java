@@ -23,7 +23,7 @@ public class Genre {
     private Long id;
 
     @Basic(optional = false)
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
 }
