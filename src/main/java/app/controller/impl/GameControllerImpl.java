@@ -128,7 +128,7 @@ public class GameControllerImpl implements Controller {
         try {
             Long id = ctx.pathParamAsClass("id", Long.class).get();
 
-            ctx.redirect(String.format("/api/reviews?id=%d", id));
+            ctx.redirect(String.format("/api/reviews?gameId=%d", id));
         } catch (ValidationException e) {
             throw new BadRequestResponse(e.getErrors().toString());
         }
