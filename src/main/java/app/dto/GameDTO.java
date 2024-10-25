@@ -36,7 +36,7 @@ public class GameDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Double rating;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "rating_count", access = JsonProperty.Access.READ_ONLY)
     private Long ratingCount;
 
     @JsonProperty("platforms")
