@@ -1,6 +1,6 @@
 package app.controller.impl;
 
-import app.Populator;
+import app.PopulatorTestUtil;
 import app.SecurityTestUtil;
 import app.config.AppConfig;
 import app.config.HibernateConfig;
@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 class PlatformControllerImplTest {
 
-    private static Populator populator;
+    private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
 
     private static PlatformMapper platformMapper;
@@ -37,7 +37,7 @@ class PlatformControllerImplTest {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
         int port = 7070;
 
-        populator = new Populator(emf);
+        populatorTestUtil = new PopulatorTestUtil(emf);
         app = AppConfig.startServer(port, emf);
 
         platformMapper = new PlatformMapper();
@@ -47,24 +47,24 @@ class PlatformControllerImplTest {
 
     @BeforeEach
     void setUp() {
-        List<Role> roles = populator.createRoles();
-        populator.persist(roles);
+        List<Role> roles = populatorTestUtil.createRoles();
+        populatorTestUtil.persist(roles);
 
-        List<User> users = populator.createUsers(roles);
-        populator.persist(users);
+        List<User> users = populatorTestUtil.createUsers(roles);
+        populatorTestUtil.persist(users);
 
-        List<Platform> platforms = populator.createPlatforms();
-        populator.persist(platforms);
+        List<Platform> platforms = populatorTestUtil.createPlatforms();
+        populatorTestUtil.persist(platforms);
 
         platformDTOList = platforms.stream().map(platformMapper::convertToDTO).toList();
     }
 
     @AfterEach
     void tearDown() {
-        populator.cleanup(User.class);
-        populator.cleanup(Role.class);
+        populatorTestUtil.cleanup(User.class);
+        populatorTestUtil.cleanup(Role.class);
 
-        populator.cleanup(Platform.class);
+        populatorTestUtil.cleanup(Platform.class);
     }
 
     @AfterAll
