@@ -1,6 +1,6 @@
 package app.dao.impl;
 
-import app.Populator;
+import app.TestPopulator;
 import app.config.HibernateConfig;
 import app.entity.Platform;
 import jakarta.persistence.EntityManagerFactory;
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class PlatformDAOImplTest {
 
-    private static Populator populator;
+    private static TestPopulator testPopulator;
     private static PlatformDAOImpl platformDAO;
 
     private List<Platform> platforms;
@@ -30,19 +30,19 @@ class PlatformDAOImplTest {
     static void beforeAll() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-        populator = new Populator(emf);
+        testPopulator = new TestPopulator(emf);
         platformDAO = PlatformDAOImpl.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        platforms = populator.createPlatforms();
-        populator.persist(platforms);
+        platforms = testPopulator.createPlatforms();
+        testPopulator.persist(platforms);
     }
 
     @AfterEach
     void tearDown() {
-        populator.cleanup(Platform.class);
+        testPopulator.cleanup(Platform.class);
     }
 
     @Test

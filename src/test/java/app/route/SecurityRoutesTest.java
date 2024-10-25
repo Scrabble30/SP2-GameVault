@@ -1,7 +1,7 @@
 package app.route;
 
-import app.Populator;
 import app.SecurityTestUtil;
+import app.TestPopulator;
 import app.config.AppConfig;
 import app.config.HibernateConfig;
 import app.dto.UserDTO;
@@ -19,7 +19,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 class SecurityRoutesTest {
 
-    private static Populator populator;
+    private static TestPopulator testPopulator;
     private static Javalin app;
 
     @BeforeAll
@@ -27,7 +27,7 @@ class SecurityRoutesTest {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
         int port = 7070;
 
-        populator = new Populator(emf);
+        testPopulator = new TestPopulator(emf);
         app = AppConfig.startServer(port, emf);
 
         RestAssured.baseURI = String.format("http://localhost:%d/api", port);
@@ -35,17 +35,17 @@ class SecurityRoutesTest {
 
     @BeforeEach
     void setUp() {
-        List<Role> roles = populator.createRoles();
-        populator.persist(roles);
+        List<Role> roles = testPopulator.createRoles();
+        testPopulator.persist(roles);
 
-        List<User> users = populator.createUsers(roles);
-        populator.persist(users);
+        List<User> users = testPopulator.createUsers(roles);
+        testPopulator.persist(users);
     }
 
     @AfterEach
     void tearDown() {
-        populator.cleanup(User.class);
-        populator.cleanup(Role.class);
+        testPopulator.cleanup(User.class);
+        testPopulator.cleanup(Role.class);
     }
 
     @AfterAll
