@@ -1,0 +1,62 @@
+### Get all games
+GET {{URL}}/games
+Authorization: Bearer {{jwt_token}}
+
+### Get game by id
+GET {{URL}}/games/11
+Authorization: Bearer {{jwt_token}}
+
+### Create a game
+POST {{URL}}/games
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "id": 16,
+  "name": "Game Title 16",
+  "released": "2024-08-21",
+  "background_image": "https://example.com/image16.jpg",
+  "metacritic": 67,
+  "playtime": 8,
+  "description": "Description for Game 16",
+  "platforms": [
+    {
+      "id": 8,
+      "name": "Android"
+    }
+  ],
+  "genres": [
+    {
+      "id": 5,
+      "name": "RPG"
+    },
+    {
+      "id": 6,
+      "name": "Fighting"
+    }
+  ]
+}
+
+### Update a game
+PUT {{URL}}/games/16
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "name": "Awesome Game Title 16",
+  "playtime": "25",
+  "genres": [
+    {
+      "id": 3,
+      "name": "Adventure"
+    },
+    {
+      "id": 5,
+      "name": "RPG"
+    }
+  ]
+}
+
+### Delete a game
+DELETE {{URL}}/games/16
+Authorization: Bearer {{jwt_token}}
