@@ -17,8 +17,8 @@ public class GameRoutes {
 
     public EndpointGroup getGameRoutes() {
         return () -> {
-            get("/", gameController::getAll, AppRouteRole.ADMIN, AppRouteRole.USER);
-            get("/{id}", gameController::getById, AppRouteRole.ADMIN, AppRouteRole.USER);
+            get("/", gameController::getAll, AppRouteRole.ANYONE);
+            get("/{id}", gameController::getById, AppRouteRole.ANYONE);
             post("/", gameController::create, AppRouteRole.ADMIN);
             put("/{id}", gameController::update, AppRouteRole.ADMIN);
             delete("/{id}", gameController::delete, AppRouteRole.ADMIN);
