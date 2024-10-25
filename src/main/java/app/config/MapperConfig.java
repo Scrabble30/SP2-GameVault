@@ -7,12 +7,13 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 
+@Getter
 public class MapperConfig {
 
-    @Getter
-    private static final ModelMapper modelMapper;
+    private static MapperConfig instance;
+    private final ModelMapper modelMapper;
 
-    static {
+    private MapperConfig() {
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -23,5 +24,13 @@ public class MapperConfig {
         TypeMap<GameDTO, Game> gameDTOMapper = modelMapper.createTypeMap(GameDTO.class, Game.class);
         gameDTOMapper.addMapping(GameDTO::getPlatformDTOSet, Game::setPlatformSet);
         gameDTOMapper.addMapping(GameDTO::getGenreDTOSet, Game::setGenreSet);
+    }
+
+    public static MapperConfig getInstance() {
+        if (instance == null) {
+            instance = new MapperConfig();
+        }
+
+        return instance;
     }
 }
