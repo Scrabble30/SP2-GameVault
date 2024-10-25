@@ -23,7 +23,7 @@ public class Platform {
     private Long id;
 
     @Basic(optional = false)
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 25)
     private String name;
 
 }

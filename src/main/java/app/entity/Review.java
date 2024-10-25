@@ -27,7 +27,7 @@ public class Review {
     private Long id;
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 25)
     private String username;
 
     @Basic(optional = false)
@@ -39,7 +39,7 @@ public class Review {
     private Double rating;
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String review;
 
 }
