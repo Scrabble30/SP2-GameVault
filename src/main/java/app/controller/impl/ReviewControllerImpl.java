@@ -57,15 +57,16 @@ public class ReviewControllerImpl implements Controller {
     @Override
     public void getAll(Context ctx) {
         try {
-            String idParam = ctx.queryParam("id");
-            Long id = Long.valueOf(idParam);
+            Long id = ctx.queryParamAsClass("gameId", Long.class).get();
 
             Set<Review> foundReviewSet = reviewDAO.getByGameId(id);
             Set<ReviewDTO> mappedReviewDTOSet = foundReviewSet.stream().map(reviewMapper::convertToDTO).collect(Collectors.toSet());
 
             ctx.status(HttpStatus.OK);
             ctx.json(mappedReviewDTOSet, ReviewDTO.class);
-        } catch (NumberFormatException | MappingException e) {
+        } catch (ValidationException e) {
+            throw new BadRequestResponse(e.getErrors().toString());
+        } catch (MappingException e) {
             throw new BadRequestResponse(e.getMessage());
         } catch (EntityNotFoundException e) {
             throw new NotFoundResponse(e.getMessage());
