@@ -153,13 +153,6 @@ public class PopulatorTestUtil {
                         games.get(1).getId(),
                         2.8,
                         "Bad game"
-                ),
-                new Review(
-                        null,
-                        users.get(2).getUsername(),
-                        games.get(1).getId(),
-                        5.0,
-                        "Mid game"
                 )
         );
 
