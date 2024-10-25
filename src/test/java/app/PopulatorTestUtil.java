@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Populator {
+public class PopulatorTestUtil {
 
     private final EntityManagerFactory emf;
 
-    public Populator(EntityManagerFactory emf) {
+    public PopulatorTestUtil(EntityManagerFactory emf) {
         this.emf = emf;
     }
 

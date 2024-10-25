@@ -19,6 +19,7 @@ public class GameRoutes {
         return () -> {
             get("/", gameController::getAll, AppRouteRole.ANYONE);
             get("/{id}", gameController::getById, AppRouteRole.ANYONE);
+            get("/{id}/reviews", gameController::getAllReviews, AppRouteRole.ANYONE);
             post("/", gameController::create, AppRouteRole.ADMIN);
             put("/{id}", gameController::update, AppRouteRole.ADMIN);
             delete("/{id}", gameController::delete, AppRouteRole.ADMIN);
