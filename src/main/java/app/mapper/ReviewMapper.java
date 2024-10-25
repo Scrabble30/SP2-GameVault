@@ -6,6 +6,7 @@ import app.entity.Review;
 import org.modelmapper.ModelMapper;
 
 public class ReviewMapper {
+
     private final ModelMapper modelMapper;
 
     public ReviewMapper() {
