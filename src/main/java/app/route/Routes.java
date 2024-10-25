@@ -8,17 +8,17 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 public class Routes {
 
     private final GameRoutes gameRoutes;
-    private final ReviewRoute reviewRoute;
+    private final ReviewRoutes reviewRoutes;
 
     public Routes(EntityManagerFactory emf) {
         this.gameRoutes = new GameRoutes(emf);
-        this.reviewRoute = new ReviewRoute(emf);
+        this.reviewRoutes = new ReviewRoutes(emf);
     }
 
     public EndpointGroup getAPIRoutes() {
         return () -> {
             path("/games", gameRoutes.getGameRoutes());
-            path("/reviews", reviewRoute.getRoutes());
+            path("/reviews", reviewRoutes.getReviewRoutes());
         };
     }
 }

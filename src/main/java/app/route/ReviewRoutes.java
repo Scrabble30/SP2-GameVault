@@ -8,18 +8,18 @@ import jakarta.persistence.EntityManagerFactory;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
-public class ReviewRoute {
+public class ReviewRoutes {
 
     private final Controller reviewControllerImpl;
 
-    public ReviewRoute(EntityManagerFactory emf) {
+    public ReviewRoutes(EntityManagerFactory emf) {
         reviewControllerImpl = ReviewControllerImpl.getInstance(emf);
     }
 
-    protected EndpointGroup getRoutes() {
+    protected EndpointGroup getReviewRoutes() {
         return () -> {
-            get("/{id}", reviewControllerImpl::getById, AppRouteRole.ANYONE);
             get("/", reviewControllerImpl::getAll, AppRouteRole.ANYONE);
+            get("/{id}", reviewControllerImpl::getById, AppRouteRole.ANYONE);
             post("/", reviewControllerImpl::create, AppRouteRole.USER);
             put("/{id}", reviewControllerImpl::update, AppRouteRole.USER);
             delete("/{id}", reviewControllerImpl::delete, AppRouteRole.USER);
