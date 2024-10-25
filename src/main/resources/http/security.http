@@ -1,0 +1,41 @@
+### Login user
+POST {{URL}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "User1",
+  "password": "1234"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+### Login admin
+POST {{URL}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "Admin1",
+  "password": "1234"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+### Register user
+POST {{URL}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "User1",
+  "password": "1234"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
