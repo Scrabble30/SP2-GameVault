@@ -3,6 +3,8 @@ package app;
 import app.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,10 +14,35 @@ import java.util.stream.Collectors;
 
 public class TestPopulator {
 
+    private final Logger logger = LoggerFactory.getLogger(Populator.class);
     private final EntityManagerFactory emf;
 
     public TestPopulator(EntityManagerFactory emf) {
         this.emf = emf;
+    }
+
+    public void populateData() {
+        logger.info("Populating test data...");
+
+        List<Role> roles = createRoles();
+        persist(roles);
+
+        List<User> users = createUsers(roles);
+        persist(users);
+
+        List<Genre> genres = createGenres();
+        persist(genres);
+
+        List<Platform> platforms = createPlatforms();
+        persist(platforms);
+
+        List<Game> games = createGames(genres, platforms);
+        List<Review> reviews = createReviews(users, games);
+
+        persist(reviews);
+        persist(games);
+
+        logger.info("Test data population complete");
     }
 
     public List<Genre> createGenres() {
