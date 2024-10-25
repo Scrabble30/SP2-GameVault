@@ -8,7 +8,7 @@ import app.dto.PlatformDTO;
 import app.entity.Platform;
 import app.entity.Role;
 import app.entity.User;
-import app.mapper.PlatformMapper;
+import app.mapper.impl.PlatformMapperImpl;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 import io.restassured.RestAssured;
@@ -28,7 +28,7 @@ class PlatformControllerImplTest {
     private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
 
-    private static PlatformMapper platformMapper;
+    private static PlatformMapperImpl platformMapper;
 
     private List<PlatformDTO> platformDTOList;
 
@@ -40,7 +40,7 @@ class PlatformControllerImplTest {
         populatorTestUtil = new PopulatorTestUtil(emf);
         app = AppConfig.startServer(port, emf);
 
-        platformMapper = new PlatformMapper();
+        platformMapper = PlatformMapperImpl.getInstance();
 
         RestAssured.baseURI = String.format("http://localhost:%d/api", port);
     }

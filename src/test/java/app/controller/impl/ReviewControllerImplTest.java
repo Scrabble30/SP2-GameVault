@@ -7,8 +7,8 @@ import app.config.HibernateConfig;
 import app.dto.GameDTO;
 import app.dto.ReviewDTO;
 import app.entity.*;
-import app.mapper.GameMapper;
-import app.mapper.ReviewMapper;
+import app.mapper.impl.GameMapperImpl;
+import app.mapper.impl.ReviewMapperImpl;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 import io.restassured.RestAssured;
@@ -25,8 +25,8 @@ class ReviewControllerImplTest {
 
     private static Javalin app;
     private static PopulatorTestUtil populatorTestUtil;
-    private static GameMapper gameMapper;
-    private static ReviewMapper reviewMapper;
+    private static GameMapperImpl gameMapper;
+    private static ReviewMapperImpl reviewMapper;
 
     private List<GameDTO> gameDTOList;
     private List<ReviewDTO> reviewDTOList;
@@ -39,8 +39,8 @@ class ReviewControllerImplTest {
         populatorTestUtil = new PopulatorTestUtil(emf);
         app = AppConfig.startServer(port, emf);
 
-        gameMapper = new GameMapper();
-        reviewMapper = new ReviewMapper();
+        gameMapper = GameMapperImpl.getInstance();
+        reviewMapper = ReviewMapperImpl.getInstance();
 
         RestAssured.baseURI = String.format("http://localhost:%d/api", port);
     }

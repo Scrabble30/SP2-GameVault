@@ -8,7 +8,7 @@ import app.dto.GenreDTO;
 import app.entity.Genre;
 import app.entity.Role;
 import app.entity.User;
-import app.mapper.GenreMapper;
+import app.mapper.impl.GenreMapperImpl;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 import io.restassured.RestAssured;
@@ -28,7 +28,7 @@ class GenreControllerImplTest {
     private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
 
-    private static GenreMapper genreMapper;
+    private static GenreMapperImpl genreMapper;
 
     private List<GenreDTO> genreDTOList;
 
@@ -40,7 +40,7 @@ class GenreControllerImplTest {
         populatorTestUtil = new PopulatorTestUtil(emf);
         app = AppConfig.startServer(port, emf);
 
-        genreMapper = new GenreMapper();
+        genreMapper = GenreMapperImpl.getInstance();
 
         RestAssured.baseURI = String.format("http://localhost:%d/api", port);
     }

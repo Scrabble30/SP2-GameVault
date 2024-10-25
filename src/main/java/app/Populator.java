@@ -10,9 +10,9 @@ import app.entity.Game;
 import app.entity.Genre;
 import app.entity.Platform;
 import app.entity.Role;
-import app.mapper.GameMapper;
-import app.mapper.GenreMapper;
-import app.mapper.PlatformMapper;
+import app.mapper.impl.GameMapperImpl;
+import app.mapper.impl.GenreMapperImpl;
+import app.mapper.impl.PlatformMapperImpl;
 import app.service.GameService;
 import app.service.GenreService;
 import app.service.PlatformService;
@@ -43,9 +43,9 @@ public class Populator {
     private final GenreDAOImpl genreDAO;
     private final GameDAOImpl gameDAO;
 
-    private final PlatformMapper platformMapper;
-    private final GenreMapper genreMapper;
-    private final GameMapper gameMapper;
+    private final PlatformMapperImpl platformMapper;
+    private final GenreMapperImpl genreMapper;
+    private final GameMapperImpl gameMapper;
 
     public Populator(EntityManagerFactory emf) {
         this.emf = emf;
@@ -61,9 +61,9 @@ public class Populator {
         genreDAO = GenreDAOImpl.getInstance(emf);
         gameDAO = GameDAOImpl.getInstance(emf);
 
-        platformMapper = new PlatformMapper();
-        genreMapper = new GenreMapper();
-        gameMapper = new GameMapper();
+        platformMapper = PlatformMapperImpl.getInstance();
+        genreMapper = GenreMapperImpl.getInstance();
+        gameMapper = GameMapperImpl.getInstance();
     }
 
     public void populateData() {

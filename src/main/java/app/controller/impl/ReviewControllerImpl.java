@@ -4,7 +4,7 @@ import app.controller.Controller;
 import app.dao.impl.ReviewDAOImpl;
 import app.dto.ReviewDTO;
 import app.entity.Review;
-import app.mapper.ReviewMapper;
+import app.mapper.impl.ReviewMapperImpl;
 import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
@@ -20,11 +20,11 @@ public class ReviewControllerImpl implements Controller {
     private static ReviewControllerImpl instance;
 
     private final ReviewDAOImpl reviewDAO;
-    private final ReviewMapper reviewMapper;
+    private final ReviewMapperImpl reviewMapper;
 
     private ReviewControllerImpl(EntityManagerFactory emf) {
         this.reviewDAO = ReviewDAOImpl.getInstance(emf);
-        this.reviewMapper = new ReviewMapper();
+        this.reviewMapper = ReviewMapperImpl.getInstance();
     }
 
     public static ReviewControllerImpl getInstance(EntityManagerFactory emf) {
