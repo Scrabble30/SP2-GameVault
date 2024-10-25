@@ -1,0 +1,33 @@
+### A get request to get a review by id
+GET {{URL}}/reviews/3/
+
+### A get request for getting all reviews by a game id
+GET {{URL}}/games/13537/reviews/
+
+### A post request for creating a new review
+POST {{URL}}/reviews/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "username": "User1",
+  "gameId": 3070,
+  "rating": 7.8,
+  "review": "A really promising game!"
+}
+
+### A put request for updating an existing review
+PUT {{URL}}/reviews/1/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "username": "User1",
+  "gameId": 12020,
+  "rating": 5.5,
+  "review": "Disappointed with the ending!"
+}
+
+### A delete request for deleting an existing review
+DELETE {{URL}}/reviews/3/
+Authorization: Bearer {{jwt_token}}
