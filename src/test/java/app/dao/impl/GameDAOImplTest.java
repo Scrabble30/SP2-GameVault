@@ -1,6 +1,6 @@
 package app.dao.impl;
 
-import app.TestPopulator;
+import app.PopulatorTestUtil;
 import app.config.HibernateConfig;
 import app.entity.Game;
 import app.entity.Genre;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class GameDAOImplTest {
 
-    private static TestPopulator testPopulator;
+    private static PopulatorTestUtil populatorTestUtil;
     private static GameDAOImpl gameDAO;
 
     private List<Genre> genres;
@@ -36,27 +36,27 @@ class GameDAOImplTest {
     static void beforeAll() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-        testPopulator = new TestPopulator(emf);
+        populatorTestUtil = new PopulatorTestUtil(emf);
         gameDAO = GameDAOImpl.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        genres = testPopulator.createGenres();
-        testPopulator.persist(genres);
+        genres = populatorTestUtil.createGenres();
+        populatorTestUtil.persist(genres);
 
-        platforms = testPopulator.createPlatforms();
-        testPopulator.persist(platforms);
+        platforms = populatorTestUtil.createPlatforms();
+        populatorTestUtil.persist(platforms);
 
-        games = testPopulator.createGames(genres, platforms);
-        testPopulator.persist(games);
+        games = populatorTestUtil.createGames(genres, platforms);
+        populatorTestUtil.persist(games);
     }
 
     @AfterEach
     void tearDown() {
-        testPopulator.cleanup(Game.class);
-        testPopulator.cleanup(Genre.class);
-        testPopulator.cleanup(Platform.class);
+        populatorTestUtil.cleanup(Game.class);
+        populatorTestUtil.cleanup(Genre.class);
+        populatorTestUtil.cleanup(Platform.class);
     }
 
     @Test

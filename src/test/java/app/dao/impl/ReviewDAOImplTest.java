@@ -1,6 +1,6 @@
 package app.dao.impl;
 
-import app.TestPopulator;
+import app.PopulatorTestUtil;
 import app.config.HibernateConfig;
 import app.entity.*;
 import jakarta.persistence.EntityManagerFactory;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class ReviewDAOImplTest {
 
-    private static TestPopulator testPopulator;
+    private static PopulatorTestUtil populatorTestUtil;
     private static GameDAOImpl gameDAO;
     private static ReviewDAOImpl reviewDAO;
 
@@ -36,40 +36,40 @@ class ReviewDAOImplTest {
     static void beforeAll() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-        testPopulator = new TestPopulator(emf);
+        populatorTestUtil = new PopulatorTestUtil(emf);
         gameDAO = GameDAOImpl.getInstance(emf);
         reviewDAO = ReviewDAOImpl.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        List<Role> roles = testPopulator.createRoles();
-        testPopulator.persist(roles);
+        List<Role> roles = populatorTestUtil.createRoles();
+        populatorTestUtil.persist(roles);
 
-        users = testPopulator.createUsers(roles);
-        testPopulator.persist(users);
+        users = populatorTestUtil.createUsers(roles);
+        populatorTestUtil.persist(users);
 
-        List<Genre> genres = testPopulator.createGenres();
-        testPopulator.persist(genres);
+        List<Genre> genres = populatorTestUtil.createGenres();
+        populatorTestUtil.persist(genres);
 
-        List<Platform> platforms = testPopulator.createPlatforms();
-        testPopulator.persist(platforms);
+        List<Platform> platforms = populatorTestUtil.createPlatforms();
+        populatorTestUtil.persist(platforms);
 
-        games = testPopulator.createGames(genres, platforms);
-        reviews = testPopulator.createReviews(users, games);
+        games = populatorTestUtil.createGames(genres, platforms);
+        reviews = populatorTestUtil.createReviews(users, games);
 
-        testPopulator.persist(games);
-        testPopulator.persist(reviews);
+        populatorTestUtil.persist(games);
+        populatorTestUtil.persist(reviews);
     }
 
     @AfterEach
     void tearDown() {
-        testPopulator.cleanup(Review.class);
-        testPopulator.cleanup(Game.class);
-        testPopulator.cleanup(Platform.class);
-        testPopulator.cleanup(Genre.class);
-        testPopulator.cleanup(User.class);
-        testPopulator.cleanup(Role.class);
+        populatorTestUtil.cleanup(Review.class);
+        populatorTestUtil.cleanup(Game.class);
+        populatorTestUtil.cleanup(Platform.class);
+        populatorTestUtil.cleanup(Genre.class);
+        populatorTestUtil.cleanup(User.class);
+        populatorTestUtil.cleanup(Role.class);
     }
 
     @Test

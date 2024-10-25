@@ -12,12 +12,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TestPopulator {
+public class PopulatorTestUtil {
 
     private final Logger logger = LoggerFactory.getLogger(Populator.class);
     private final EntityManagerFactory emf;
 
-    public TestPopulator(EntityManagerFactory emf) {
+    public PopulatorTestUtil(EntityManagerFactory emf) {
         this.emf = emf;
     }
 

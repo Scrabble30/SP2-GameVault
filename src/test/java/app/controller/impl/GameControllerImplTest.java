@@ -1,7 +1,7 @@
 package app.controller.impl;
 
+import app.PopulatorTestUtil;
 import app.SecurityTestUtil;
-import app.TestPopulator;
 import app.config.AppConfig;
 import app.config.HibernateConfig;
 import app.dto.GameDTO;
@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 
 class GameControllerImplTest {
 
-    private static TestPopulator testPopulator;
+    private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
 
     private static PlatformMapper platformMapper;
@@ -44,7 +44,7 @@ class GameControllerImplTest {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
         int port = 7070;
 
-        testPopulator = new TestPopulator(emf);
+        populatorTestUtil = new PopulatorTestUtil(emf);
         app = AppConfig.startServer(port, emf);
 
         platformMapper = new PlatformMapper();
@@ -56,20 +56,20 @@ class GameControllerImplTest {
 
     @BeforeEach
     void setUp() {
-        List<Role> roles = testPopulator.createRoles();
-        testPopulator.persist(roles);
+        List<Role> roles = populatorTestUtil.createRoles();
+        populatorTestUtil.persist(roles);
 
-        List<User> users = testPopulator.createUsers(roles);
-        testPopulator.persist(users);
+        List<User> users = populatorTestUtil.createUsers(roles);
+        populatorTestUtil.persist(users);
 
-        List<Platform> platforms = testPopulator.createPlatforms();
-        testPopulator.persist(platforms);
+        List<Platform> platforms = populatorTestUtil.createPlatforms();
+        populatorTestUtil.persist(platforms);
 
-        List<Genre> genres = testPopulator.createGenres();
-        testPopulator.persist(genres);
+        List<Genre> genres = populatorTestUtil.createGenres();
+        populatorTestUtil.persist(genres);
 
-        List<Game> games = testPopulator.createGames(genres, platforms);
-        testPopulator.persist(games);
+        List<Game> games = populatorTestUtil.createGames(genres, platforms);
+        populatorTestUtil.persist(games);
 
         platformDTOList = platforms.stream().map(platformMapper::convertToDTO).toList();
         genreDTOList = genres.stream().map(genreMapper::convertToDTO).toList();
@@ -78,12 +78,12 @@ class GameControllerImplTest {
 
     @AfterEach
     void tearDown() {
-        testPopulator.cleanup(User.class);
-        testPopulator.cleanup(Role.class);
+        populatorTestUtil.cleanup(User.class);
+        populatorTestUtil.cleanup(Role.class);
 
-        testPopulator.cleanup(Game.class);
-        testPopulator.cleanup(Genre.class);
-        testPopulator.cleanup(Platform.class);
+        populatorTestUtil.cleanup(Game.class);
+        populatorTestUtil.cleanup(Genre.class);
+        populatorTestUtil.cleanup(Platform.class);
     }
 
     @AfterAll
