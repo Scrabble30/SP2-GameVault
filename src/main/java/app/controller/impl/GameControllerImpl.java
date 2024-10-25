@@ -123,4 +123,14 @@ public class GameControllerImpl implements Controller {
             throw new NotFoundResponse(e.getMessage());
         }
     }
+
+    public void getAllReviews(Context ctx) {
+        try {
+            Long id = ctx.pathParamAsClass("id", Long.class).get();
+
+            ctx.redirect(String.format("/api/reviews?gameId=%d", id));
+        } catch (ValidationException e) {
+            throw new BadRequestResponse(e.getErrors().toString());
+        }
+    }
 }
