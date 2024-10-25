@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Populator {
+public class PopulatorTestUtil {
 
     private final EntityManagerFactory emf;
 
-    public Populator(EntityManagerFactory emf) {
+    public PopulatorTestUtil(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
@@ -153,6 +153,13 @@ public class Populator {
                         games.get(1).getId(),
                         2.8,
                         "Bad game"
+                ),
+                new Review(
+                        null,
+                        users.get(2).getUsername(),
+                        games.get(1).getId(),
+                        5.0,
+                        "Mid game"
                 )
         );
 
