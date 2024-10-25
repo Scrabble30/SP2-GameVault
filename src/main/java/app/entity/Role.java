@@ -19,7 +19,7 @@ public class Role {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
     @Builder
