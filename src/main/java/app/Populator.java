@@ -1,7 +1,10 @@
 package app;
 
 import app.dto.GameDTO;
-import app.entity.*;
+import app.entity.Game;
+import app.entity.Genre;
+import app.entity.Platform;
+import app.entity.Role;
 import app.mapper.GameMapper;
 import app.mapper.GenreMapper;
 import app.mapper.PlatformMapper;
@@ -19,9 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Populator {
 
@@ -63,77 +64,12 @@ public class Populator {
 
         persist(platforms);
         persist(genres);
+        persist(games);
 
         List<Role> roles = createRoles();
         persist(roles);
 
-        List<User> users = createUsers(roles);
-        persist(users);
-
-        List<Review> reviews = createReviews(users, games);
-        persist(reviews);
-        persist(games);
-
         logger.info("Data population complete");
-    }
-
-    public List<Review> createReviews(List<User> users, List<Game> games) {
-        List<Review> reviews = List.of(
-                new Review(
-                        null,
-                        users.get(0).getUsername(),
-                        games.get(0).getId(),
-                        8.5,
-                        "Awesome game"
-                ),
-                new Review(
-                        null,
-                        users.get(0).getUsername(),
-                        games.get(1).getId(),
-                        6.0,
-                        "Meh game"
-                ),
-                new Review(
-                        null,
-                        users.get(1).getUsername(),
-                        games.get(1).getId(),
-                        2.8,
-                        "Bad game"
-                )
-        );
-
-        Map<Long, Game> gameMap = games.stream().collect(Collectors.toMap(Game::getId, game -> game));
-
-        reviews.stream()
-                .collect(Collectors.groupingBy(Review::getGameId))
-                .forEach((gameId, gameReviews) -> {
-                    Game game = gameMap.get(gameId);
-
-                    game.setRating(gameReviews.stream().mapToDouble(Review::getRating).average().orElse(0));
-                    game.setRatingCount((long) gameReviews.size());
-                });
-
-        return reviews;
-    }
-
-    public List<User> createUsers(List<Role> roles) {
-        return List.of(
-                new User(
-                        "User1",
-                        "1234",
-                        Set.of(roles.get(0))
-                ),
-                new User(
-                        "User2",
-                        "1234",
-                        Set.of(roles.get(0))
-                ),
-                new User(
-                        "Admin1",
-                        "1234",
-                        Set.of(roles.get(1))
-                )
-        );
     }
 
     public List<Role> createRoles() {
