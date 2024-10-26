@@ -20,8 +20,8 @@ public class GenreControllerImpl implements Controller {
 
     private static GenreControllerImpl instance;
 
-    private GenreDAOImpl genreDAO;
-    private GenreMapperImpl genreMapper;
+    private final GenreMapperImpl genreMapper;
+    private final GenreDAOImpl genreDAO;
 
     private GenreControllerImpl(EntityManagerFactory emf) {
         this.genreDAO = GenreDAOImpl.getInstance(emf);
