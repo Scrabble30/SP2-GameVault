@@ -1,4 +1,4 @@
-package app.route;
+package app.controller;
 
 import app.PopulatorTestUtil;
 import app.SecurityTestUtil;
@@ -17,7 +17,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 
-class SecurityRoutesTest {
+class SecurityControllerTest {
 
     private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
