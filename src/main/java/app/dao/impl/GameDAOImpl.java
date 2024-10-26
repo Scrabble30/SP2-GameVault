@@ -4,7 +4,10 @@ import app.dao.AbstractDAO;
 import app.entity.Game;
 import app.entity.Genre;
 import app.entity.Platform;
-import jakarta.persistence.*;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,37 +36,10 @@ public class GameDAOImpl extends AbstractDAO<Game, Long> {
                 throw new EntityExistsException(String.format("Game with id %d already exists", game.getId()));
             }
 
-            if (game.getGenreSet() != null) {
-                Set<Genre> genreSet = new HashSet<>();
-
-                game.getGenreSet().forEach(genre -> {
-                    Genre foundGenre = em.find(Genre.class, genre.getId());
-
-                    if (foundGenre != null) {
-                        genreSet.add(foundGenre);
-                    } else {
-                        throw new EntityNotFoundException(String.format("Genre with id %d does not exist.", genre.getId()));
-                    }
-                });
-
-                game.setGenreSet(genreSet);
-            }
-
-            if (game.getPlatformSet() != null) {
-                Set<Platform> platformSet = new HashSet<>();
-
-                game.getPlatformSet().forEach(platform -> {
-                    Platform foundPlatform = em.find(Platform.class, platform.getId());
-
-                    if (foundPlatform != null) {
-                        platformSet.add(foundPlatform);
-                    } else {
-                        throw new EntityNotFoundException(String.format("Platform with id %d does not exist.", platform.getId()));
-                    }
-                });
-
-                game.setPlatformSet(platformSet);
-            }
+            if (game.getGenreSet() != null)
+                game.setGenreSet(getFoundGenres(game));
+            if (game.getPlatformSet() != null)
+                game.setPlatformSet(getFoundPlatforms(game));
 
             em.getTransaction().begin();
             em.persist(game);
@@ -96,14 +72,50 @@ public class GameDAOImpl extends AbstractDAO<Game, Long> {
                 foundGame.setPlaytime(game.getPlaytime());
             if (game.getDescription() != null)
                 foundGame.setDescription(game.getDescription());
-            if (game.getPlatformSet() != null)
-                foundGame.setPlatformSet(game.getPlatformSet());
             if (game.getGenreSet() != null)
-                foundGame.setGenreSet(game.getGenreSet());
+                foundGame.setGenreSet(getFoundGenres(game));
+            if (game.getPlatformSet() != null)
+                foundGame.setPlatformSet(getFoundPlatforms(game));
 
             em.getTransaction().commit();
 
             return foundGame;
+        }
+    }
+
+    private Set<Genre> getFoundGenres(Game game) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Set<Genre> foundGenres = new HashSet<>();
+
+            game.getGenreSet().forEach(genre -> {
+                Genre foundGenre = em.find(Genre.class, genre.getId());
+
+                if (foundGenre != null) {
+                    foundGenres.add(foundGenre);
+                } else {
+                    throw new EntityNotFoundException(String.format("Genre with id %d does not exist.", genre.getId()));
+                }
+            });
+
+            return foundGenres;
+        }
+    }
+
+    private Set<Platform> getFoundPlatforms(Game game) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Set<Platform> foundPlatforms = new HashSet<>();
+
+            game.getPlatformSet().forEach(platform -> {
+                Platform foundPlatform = em.find(Platform.class, platform.getId());
+
+                if (foundPlatform != null) {
+                    foundPlatforms.add(foundPlatform);
+                } else {
+                    throw new EntityNotFoundException(String.format("Platform with id %d does not exist.", platform.getId()));
+                }
+            });
+
+            return foundPlatforms;
         }
     }
 }
