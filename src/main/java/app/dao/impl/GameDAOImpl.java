@@ -4,15 +4,22 @@ import app.dao.AbstractDAO;
 import app.entity.Game;
 import app.entity.Genre;
 import app.entity.Platform;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
+import app.filter.GameFilter;
+import app.filter.GamePage;
+import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GameDAOImpl extends AbstractDAO<Game, Long> {
+
     private static GameDAOImpl instance;
 
     private GameDAOImpl(EntityManagerFactory emf) {
@@ -46,6 +53,43 @@ public class GameDAOImpl extends AbstractDAO<Game, Long> {
             em.getTransaction().commit();
 
             return game;
+        }
+    }
+
+    public GamePage getAll(GameFilter gameFilter) {
+        try (EntityManager em = emf.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+            CriteriaQuery<Game> criteriaQuery = criteriaBuilder.createQuery(Game.class);
+            Root<Game> root = criteriaQuery.from(Game.class);
+
+            Predicate predicate = getPredicate(criteriaBuilder, root, gameFilter);
+            criteriaQuery.where(predicate);
+
+            TypedQuery<Game> query = em.createQuery(criteriaQuery);
+            query.setFirstResult(gameFilter.getPageNumber() * gameFilter.getPageSize());
+            query.setMaxResults(gameFilter.getPageSize());
+
+            long gamesCount = getGamesCount(gameFilter);
+            long gamesPageCount = getGamesPageCount(gameFilter.getPageSize(), gamesCount);
+
+            return new GamePage(
+                    gameFilter.getPageNumber(),
+                    gamesPageCount,
+                    gamesCount,
+                    query.getResultStream().collect(Collectors.toSet()));
+        }
+    }
+
+    private long getGamesCount(GameFilter gameFilter) {
+        try (EntityManager em = emf.createEntityManager()) {
+            CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Game> root = criteriaQuery.from(Game.class);
+
+            Predicate predicate = getPredicate(criteriaBuilder, root, gameFilter);
+            criteriaQuery.select(criteriaBuilder.count(root)).where(predicate);
+
+            return em.createQuery(criteriaQuery).getSingleResult();
         }
     }
 
@@ -117,5 +161,26 @@ public class GameDAOImpl extends AbstractDAO<Game, Long> {
 
             return foundPlatforms;
         }
+    }
+
+    private Predicate getPredicate(CriteriaBuilder criteriaBuilder, Root<Game> root, GameFilter gameFilter) {
+        List<Predicate> predicates = new LinkedList<>();
+
+        if (gameFilter.getTitle() != null)
+            predicates.add(criteriaBuilder.like(root.get("title"), String.format("%%%s%%", gameFilter.getTitle())));
+        if (gameFilter.getReleaseDateGTE() != null)
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("releaseDate"), gameFilter.getReleaseDateGTE()));
+        if (gameFilter.getReleaseDateLTE() != null)
+            predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("releaseDate"), gameFilter.getReleaseDateLTE()));
+
+        return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
+    }
+
+    private long getGamesPageCount(Integer pageSize, Long gamesCount) {
+        if (pageSize == 0 || gamesCount == 0) {
+            return 0;
+        }
+
+        return (long) Math.ceil((double) gamesCount / pageSize);
     }
 }

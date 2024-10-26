@@ -5,6 +5,8 @@ import app.config.HibernateConfig;
 import app.entity.Game;
 import app.entity.Genre;
 import app.entity.Platform;
+import app.filter.GameFilter;
+import app.filter.GamePage;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.AfterEach;
@@ -59,6 +61,26 @@ class GameDAOImplTest {
         populatorTestUtil.cleanup(Platform.class);
     }
 
+    List<Game> filterGames(GameFilter gameFilter) {
+        List<Game> filteredGames = games.stream().filter(game -> {
+            boolean include = true;
+
+            if (gameFilter.getTitle() != null)
+                include = game.getTitle().toLowerCase().contains(gameFilter.getTitle().toLowerCase());
+            if (gameFilter.getReleaseDateGTE() != null)
+                include = include && !game.getReleaseDate().isBefore(gameFilter.getReleaseDateGTE());
+            if (gameFilter.getReleaseDateLTE() != null)
+                include = include && !game.getReleaseDate().isAfter(gameFilter.getReleaseDateLTE());
+
+            return include;
+        }).toList();
+
+        int startIndex = Math.min(filteredGames.size(), gameFilter.getPageNumber() * gameFilter.getPageSize());
+        int endIndex = Math.min(filteredGames.size(), startIndex + gameFilter.getPageSize());
+
+        return filteredGames.subList(startIndex, endIndex);
+    }
+
     @Test
     void create() {
         Game lastGame = games.stream().max(Comparator.comparing(Game::getId)).orElseThrow();
@@ -95,6 +117,25 @@ class GameDAOImplTest {
         Set<Game> expectedGames = new HashSet<>(games);
 
         Set<Game> actualGames = gameDAO.getAll();
+
+        assertThat(actualGames.size(), is(expectedGames.size()));
+        assertThat(actualGames, containsInAnyOrder(expectedGames.toArray()));
+    }
+
+    @Test
+    void getAllFiltered() {
+        GameFilter gameFilter = new GameFilter(
+                0,
+                20,
+                "Game Title",
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 6, 1)
+        );
+
+        Set<Game> expectedGames = new HashSet<>(filterGames(gameFilter));
+
+        GamePage gamePage = gameDAO.getAll(gameFilter);
+        Set<Game> actualGames = gamePage.getGameSet();
 
         assertThat(actualGames.size(), is(expectedGames.size()));
         assertThat(actualGames, containsInAnyOrder(expectedGames.toArray()));
