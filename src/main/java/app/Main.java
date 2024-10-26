@@ -9,8 +9,8 @@ public class Main {
     public static void main(String[] args) {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("game_vault");
 
-        Populator populator = new Populator(emf);
-        populator.populateData();
+        //Populator populator = new Populator(emf);
+        //populator.populateData();
 
         AppConfig.startServer(7070, emf);
     }
