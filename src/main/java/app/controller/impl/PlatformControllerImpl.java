@@ -1,10 +1,10 @@
 package app.controller.impl;
 
 import app.controller.Controller;
-import app.dao.impl.GameDAOImpl;
-import app.dto.GameDTO;
-import app.entity.Game;
-import app.mapper.impl.GameMapperImpl;
+import app.dao.impl.PlatformDAOImpl;
+import app.dto.PlatformDTO;
+import app.entity.Platform;
+import app.mapper.impl.PlatformMapperImpl;
 import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
@@ -15,21 +15,21 @@ import org.hibernate.MappingException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GameControllerImpl implements Controller {
+public class PlatformControllerImpl implements Controller {
 
-    private static GameControllerImpl instance;
+    private static PlatformControllerImpl instance;
 
-    private final GameMapperImpl gameMapper;
-    private final GameDAOImpl gameDAO;
+    private final PlatformMapperImpl platformMapper;
+    private final PlatformDAOImpl platformDAO;
 
-    private GameControllerImpl(EntityManagerFactory emf) {
-        this.gameDAO = GameDAOImpl.getInstance(emf);
-        this.gameMapper = GameMapperImpl.getInstance();
+    private PlatformControllerImpl(EntityManagerFactory emf) {
+        this.platformDAO = PlatformDAOImpl.getInstance(emf);
+        this.platformMapper = PlatformMapperImpl.getInstance();
     }
 
-    public static GameControllerImpl getInstance(EntityManagerFactory emf) {
+    public static PlatformControllerImpl getInstance(EntityManagerFactory emf) {
         if (instance == null) {
-            instance = new GameControllerImpl(emf);
+            instance = new PlatformControllerImpl(emf);
         }
 
         return instance;
@@ -38,22 +38,20 @@ public class GameControllerImpl implements Controller {
     @Override
     public void create(Context ctx) {
         try {
-            GameDTO gameDTO = ctx.bodyValidator(GameDTO.class).get();
-            Game game = gameMapper.convertToEntity(gameDTO);
+            PlatformDTO platformDTO = ctx.bodyValidator(PlatformDTO.class).get();
+            Platform platform = platformMapper.convertToEntity(platformDTO);
 
-            Game createdGame = gameDAO.create(game);
-            GameDTO createdGameDTO = gameMapper.convertToDTO(createdGame);
+            Platform createdPlatform = platformDAO.create(platform);
+            PlatformDTO createdPlatformDTO = platformMapper.convertToDTO(createdPlatform);
 
             ctx.status(HttpStatus.CREATED);
-            ctx.json(createdGameDTO, GameDTO.class);
+            ctx.json(createdPlatformDTO, PlatformDTO.class);
         } catch (ValidationException e) {
             throw new BadRequestResponse(e.getErrors().toString());
         } catch (MappingException e) {
             throw new BadRequestResponse(e.getMessage());
         } catch (EntityExistsException e) {
             throw new ConflictResponse(e.getMessage());
-        } catch (EntityNotFoundException e) {
-            throw new NotFoundResponse(e.getMessage());
         }
     }
 
@@ -62,11 +60,11 @@ public class GameControllerImpl implements Controller {
         try {
             Long id = ctx.pathParamAsClass("id", Long.class).get();
 
-            Game game = gameDAO.getById(id);
-            GameDTO gameDTO = gameMapper.convertToDTO(game);
+            Platform platform = platformDAO.getById(id);
+            PlatformDTO platformDTO = platformMapper.convertToDTO(platform);
 
             ctx.status(HttpStatus.OK);
-            ctx.json(gameDTO, GameDTO.class);
+            ctx.json(platformDTO, PlatformDTO.class);
         } catch (ValidationException e) {
             throw new BadRequestResponse(e.getErrors().toString());
         } catch (MappingException e) {
@@ -79,11 +77,11 @@ public class GameControllerImpl implements Controller {
     @Override
     public void getAll(Context ctx) {
         try {
-            Set<Game> games = gameDAO.getAll();
-            Set<GameDTO> gameDTOSet = games.stream().map(gameMapper::convertToDTO).collect(Collectors.toSet());
+            Set<Platform> platforms = platformDAO.getAll();
+            Set<PlatformDTO> platformDTOList = platforms.stream().map(platformMapper::convertToDTO).collect(Collectors.toSet());
 
             ctx.status(HttpStatus.OK);
-            ctx.json(gameDTOSet, GameDTO.class);
+            ctx.json(platformDTOList, PlatformDTO.class);
         } catch (MappingException e) {
             throw new BadRequestResponse(e.getMessage());
         }
@@ -93,14 +91,14 @@ public class GameControllerImpl implements Controller {
     public void update(Context ctx) {
         try {
             Long id = ctx.pathParamAsClass("id", Long.class).get();
-            GameDTO gameDTO = ctx.bodyValidator(GameDTO.class).get();
-            Game game = gameMapper.convertToEntity(gameDTO);
+            PlatformDTO platformDTO = ctx.bodyValidator(PlatformDTO.class).get();
+            Platform platform = platformMapper.convertToEntity(platformDTO);
 
-            Game updatedGame = gameDAO.update(id, game);
-            GameDTO updatedGameDTO = gameMapper.convertToDTO(updatedGame);
+            Platform updatedPlatform = platformDAO.update(id, platform);
+            PlatformDTO updatedPlatformDTO = platformMapper.convertToDTO(updatedPlatform);
 
             ctx.status(HttpStatus.OK);
-            ctx.json(updatedGameDTO, GameDTO.class);
+            ctx.json(updatedPlatformDTO, PlatformDTO.class);
         } catch (ValidationException e) {
             throw new BadRequestResponse(e.getErrors().toString());
         } catch (MappingException e) {
@@ -115,23 +113,13 @@ public class GameControllerImpl implements Controller {
         try {
             Long id = ctx.pathParamAsClass("id", Long.class).get();
 
-            gameDAO.delete(id);
+            platformDAO.delete(id);
 
             ctx.status(HttpStatus.NO_CONTENT);
         } catch (ValidationException e) {
             throw new BadRequestResponse(e.getErrors().toString());
         } catch (EntityNotFoundException e) {
             throw new NotFoundResponse(e.getMessage());
-        }
-    }
-
-    public void getAllReviews(Context ctx) {
-        try {
-            Long id = ctx.pathParamAsClass("id", Long.class).get();
-
-            ctx.redirect(String.format("/api/reviews?gameId=%d", id));
-        } catch (ValidationException e) {
-            throw new BadRequestResponse(e.getErrors().toString());
         }
     }
 }

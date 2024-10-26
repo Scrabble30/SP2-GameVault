@@ -19,7 +19,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 25)
     private String username;
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

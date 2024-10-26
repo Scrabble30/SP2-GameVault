@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractDAO<T, I> implements IDAO<T, I> {
     protected final EntityManagerFactory emf;
-    protected Class<T> entityClass;
+    protected final Class<T> entityClass;
 
     protected AbstractDAO(EntityManagerFactory emf, Class<T> entityClass) {
         this.emf = emf;
