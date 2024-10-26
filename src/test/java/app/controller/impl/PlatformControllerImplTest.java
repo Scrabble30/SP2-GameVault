@@ -97,11 +97,9 @@ class PlatformControllerImplTest {
 
     @Test
     void getById() {
-        String token = SecurityTestUtil.loginAccount("User1", "1234");
         PlatformDTO expected = platformDTOList.get(0);
 
         PlatformDTO actual = given()
-                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/platforms/{id}", expected.getId())
                 .then()
@@ -114,11 +112,9 @@ class PlatformControllerImplTest {
 
     @Test
     void getAll() {
-        String token = SecurityTestUtil.loginAccount("User1", "1234");
         List<PlatformDTO> expected = platformDTOList;
 
         List<PlatformDTO> actual = given()
-                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/platforms")
                 .then()

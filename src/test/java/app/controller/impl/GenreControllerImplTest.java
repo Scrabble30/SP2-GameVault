@@ -97,11 +97,9 @@ class GenreControllerImplTest {
 
     @Test
     void getById() {
-        String token = SecurityTestUtil.loginAccount("User1", "1234");
         GenreDTO expectedGenreDTO = genreDTOList.get(0);
 
         GenreDTO actualGenreDTO = given()
-                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/genres/{id}", expectedGenreDTO.getId())
                 .then()
@@ -114,11 +112,9 @@ class GenreControllerImplTest {
 
     @Test
     void getAll() {
-        String token = SecurityTestUtil.loginAccount("User1", "1234");
         List<GenreDTO> expectedGenreDTOList = genreDTOList;
 
         List<GenreDTO> actualGenreDTOList = given()
-                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/genres")
                 .then()
