@@ -4,7 +4,7 @@ import app.controller.Controller;
 import app.dao.impl.GameDAOImpl;
 import app.dto.GameDTO;
 import app.entity.Game;
-import app.mapper.GameMapper;
+import app.mapper.impl.GameMapperImpl;
 import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
@@ -18,12 +18,13 @@ import java.util.stream.Collectors;
 public class GameControllerImpl implements Controller {
 
     private static GameControllerImpl instance;
-    private final GameMapper gameMapper;
+
+    private final GameMapperImpl gameMapper;
     private final GameDAOImpl gameDAO;
 
     private GameControllerImpl(EntityManagerFactory emf) {
         this.gameDAO = GameDAOImpl.getInstance(emf);
-        this.gameMapper = new GameMapper();
+        this.gameMapper = GameMapperImpl.getInstance();
     }
 
     public static GameControllerImpl getInstance(EntityManagerFactory emf) {

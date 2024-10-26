@@ -5,7 +5,7 @@ import app.dao.impl.GenreDAOImpl;
 import app.dto.GenreDTO;
 import app.dto.PlatformDTO;
 import app.entity.Genre;
-import app.mapper.GenreMapper;
+import app.mapper.impl.GenreMapperImpl;
 import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
@@ -21,11 +21,11 @@ public class GenreControllerImpl implements Controller {
     private static GenreControllerImpl instance;
 
     private GenreDAOImpl genreDAO;
-    private GenreMapper genreMapper;
+    private GenreMapperImpl genreMapper;
 
     private GenreControllerImpl(EntityManagerFactory emf) {
         this.genreDAO = GenreDAOImpl.getInstance(emf);
-        this.genreMapper = new GenreMapper();
+        this.genreMapper = GenreMapperImpl.getInstance();
     }
 
     public static GenreControllerImpl getInstance(EntityManagerFactory emf) {

@@ -4,7 +4,7 @@ import app.controller.Controller;
 import app.dao.impl.PlatformDAOImpl;
 import app.dto.PlatformDTO;
 import app.entity.Platform;
-import app.mapper.PlatformMapper;
+import app.mapper.impl.PlatformMapperImpl;
 import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
 import jakarta.persistence.EntityExistsException;
@@ -19,12 +19,12 @@ public class PlatformControllerImpl implements Controller {
 
     private static PlatformControllerImpl instance;
 
-    private final PlatformMapper platformMapper;
+    private final PlatformMapperImpl platformMapper;
     private final PlatformDAOImpl platformDAO;
 
     private PlatformControllerImpl(EntityManagerFactory emf) {
         this.platformDAO = PlatformDAOImpl.getInstance(emf);
-        this.platformMapper = new PlatformMapper();
+        this.platformMapper = PlatformMapperImpl.getInstance();
     }
 
     public static PlatformControllerImpl getInstance(EntityManagerFactory emf) {

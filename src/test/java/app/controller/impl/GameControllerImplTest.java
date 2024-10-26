@@ -8,9 +8,9 @@ import app.dto.GameDTO;
 import app.dto.GenreDTO;
 import app.dto.PlatformDTO;
 import app.entity.*;
-import app.mapper.GameMapper;
-import app.mapper.GenreMapper;
-import app.mapper.PlatformMapper;
+import app.mapper.impl.GameMapperImpl;
+import app.mapper.impl.GenreMapperImpl;
+import app.mapper.impl.PlatformMapperImpl;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 import io.restassured.RestAssured;
@@ -31,9 +31,9 @@ class GameControllerImplTest {
     private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
 
-    private static PlatformMapper platformMapper;
-    private static GenreMapper genreMapper;
-    private static GameMapper gameMapper;
+    private static PlatformMapperImpl platformMapper;
+    private static GenreMapperImpl genreMapper;
+    private static GameMapperImpl gameMapper;
 
     private List<PlatformDTO> platformDTOList;
     private List<GenreDTO> genreDTOList;
@@ -47,9 +47,9 @@ class GameControllerImplTest {
         populatorTestUtil = new PopulatorTestUtil(emf);
         app = AppConfig.startServer(port, emf);
 
-        platformMapper = new PlatformMapper();
-        genreMapper = new GenreMapper();
-        gameMapper = new GameMapper();
+        platformMapper = PlatformMapperImpl.getInstance();
+        genreMapper = GenreMapperImpl.getInstance();
+        gameMapper = GameMapperImpl.getInstance();
 
         RestAssured.baseURI = String.format("http://localhost:%d/api", port);
     }
