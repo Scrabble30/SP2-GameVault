@@ -5,9 +5,9 @@ import org.modelmapper.ModelMapper;
 
 public class AbstractMapper<D, E> implements Mapper<D, E> {
 
-    protected ModelMapper modelMapper;
-    protected Class<D> dtoClass;
-    protected Class<E> entityClass;
+    protected final ModelMapper modelMapper;
+    protected final Class<D> dtoClass;
+    protected final Class<E> entityClass;
 
     protected AbstractMapper(Class<D> dtoClass, Class<E> entityClass) {
         modelMapper = MapperConfig.getInstance().getModelMapper();
