@@ -1,7 +1,9 @@
 package app.config;
 
 import app.dto.GameDTO;
+import app.dto.GamePageDTO;
 import app.entity.Game;
+import app.filter.GamePage;
 import lombok.Getter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -24,6 +26,9 @@ public class MapperConfig {
         TypeMap<GameDTO, Game> gameDTOMapper = modelMapper.createTypeMap(GameDTO.class, Game.class);
         gameDTOMapper.addMapping(GameDTO::getPlatformDTOSet, Game::setPlatformSet);
         gameDTOMapper.addMapping(GameDTO::getGenreDTOSet, Game::setGenreSet);
+
+        TypeMap<GamePage, GamePageDTO> gamePageMapper = modelMapper.createTypeMap(GamePage.class, GamePageDTO.class);
+        gamePageMapper.addMapping(GamePage::getGameSet, GamePageDTO::setGameDTOSet);
     }
 
     public static MapperConfig getInstance() {

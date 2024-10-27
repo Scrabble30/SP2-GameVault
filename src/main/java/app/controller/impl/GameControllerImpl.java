@@ -3,7 +3,11 @@ package app.controller.impl;
 import app.controller.Controller;
 import app.dao.impl.GameDAOImpl;
 import app.dto.GameDTO;
+import app.dto.GamePageDTO;
 import app.entity.Game;
+import app.filter.GameFilter;
+import app.filter.GamePage;
+import app.mapper.GamePageMapper;
 import app.mapper.impl.GameMapperImpl;
 import io.javalin.http.*;
 import io.javalin.validation.ValidationException;
@@ -12,18 +16,19 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.MappingException;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 public class GameControllerImpl implements Controller {
 
     private static GameControllerImpl instance;
 
+    private final GamePageMapper gamePageMapper;
     private final GameMapperImpl gameMapper;
     private final GameDAOImpl gameDAO;
 
     private GameControllerImpl(EntityManagerFactory emf) {
         this.gameDAO = GameDAOImpl.getInstance(emf);
+        this.gamePageMapper = GamePageMapper.getInstance();
         this.gameMapper = GameMapperImpl.getInstance();
     }
 
@@ -79,11 +84,13 @@ public class GameControllerImpl implements Controller {
     @Override
     public void getAll(Context ctx) {
         try {
-            Set<Game> games = gameDAO.getAll();
-            Set<GameDTO> gameDTOSet = games.stream().map(gameMapper::convertToDTO).collect(Collectors.toSet());
+            GameFilter gameFilter = createGameFilter(ctx);
+
+            GamePage gamePage = gameDAO.getAll(gameFilter);
+            GamePageDTO gamePageDTO = gamePageMapper.convertToDTO(gamePage);
 
             ctx.status(HttpStatus.OK);
-            ctx.json(gameDTOSet, GameDTO.class);
+            ctx.json(gamePageDTO, GamePageDTO.class);
         } catch (MappingException e) {
             throw new BadRequestResponse(e.getMessage());
         }
@@ -133,5 +140,26 @@ public class GameControllerImpl implements Controller {
         } catch (ValidationException e) {
             throw new BadRequestResponse(e.getErrors().toString());
         }
+    }
+
+    private GameFilter createGameFilter(Context ctx) {
+        Integer pageNumber = ctx.queryParamAsClass("page_number", Integer.class)
+                .check(value -> value >= 0, "Page number cannot be less then zero")
+                .getOrDefault(0);
+        Integer pageSize = ctx.queryParamAsClass("page_size", Integer.class)
+                .check(value -> value >= 0, "Page size cannot be less than zero")
+                .getOrDefault(10);
+
+        String title = ctx.queryParamAsClass("name", String.class).allowNullable().get();
+        LocalDate releaseDateGTE = ctx.queryParamAsClass("released.gte", LocalDate.class).allowNullable().get();
+        LocalDate releaseDateLTE = ctx.queryParamAsClass("released.lte", LocalDate.class).allowNullable().get();
+
+        return new GameFilter(
+                pageNumber,
+                pageSize,
+                title,
+                releaseDateGTE,
+                releaseDateLTE
+        );
     }
 }

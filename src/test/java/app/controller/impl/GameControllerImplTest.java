@@ -8,6 +8,7 @@ import app.dto.GameDTO;
 import app.dto.GenreDTO;
 import app.dto.PlatformDTO;
 import app.entity.*;
+import app.filter.GameFilter;
 import app.mapper.impl.GameMapperImpl;
 import app.mapper.impl.GenreMapperImpl;
 import app.mapper.impl.PlatformMapperImpl;
@@ -18,10 +19,12 @@ import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -91,6 +94,46 @@ class GameControllerImplTest {
         AppConfig.stopServer(app);
     }
 
+    List<GameDTO> filterGames(GameFilter gameFilter) {
+        return gameDTOList.stream().filter(game -> {
+            boolean include = true;
+
+            if (gameFilter.getTitle() != null)
+                include = game.getTitle().toLowerCase().contains(gameFilter.getTitle().toLowerCase());
+            if (gameFilter.getReleaseDateGTE() != null)
+                include = include && !game.getReleaseDate().isBefore(gameFilter.getReleaseDateGTE());
+            if (gameFilter.getReleaseDateLTE() != null)
+                include = include && !game.getReleaseDate().isAfter(gameFilter.getReleaseDateLTE());
+
+            return include;
+        }).toList();
+    }
+
+    private long getGamesPageCount(Integer pageSize, Long gamesCount) {
+        if (pageSize == 0 || gamesCount == 0) {
+            return 0;
+        }
+
+        return (long) Math.ceil((double) gamesCount / pageSize);
+    }
+
+    String convertFilterToQueryString(GameFilter gameFilter) {
+        List<String> params = new LinkedList<>();
+
+        if (gameFilter.getPageNumber() != null)
+            params.add(String.format("page_number=%s", gameFilter.getPageNumber()));
+        if (gameFilter.getPageSize() != null)
+            params.add(String.format("page_size=%s", gameFilter.getPageSize()));
+        if (gameFilter.getTitle() != null)
+            params.add(String.format("name=%s", gameFilter.getTitle()));
+        if (gameFilter.getReleaseDateGTE() != null)
+            params.add(String.format("released.gte=%s", gameFilter.getReleaseDateGTE()));
+        if (gameFilter.getReleaseDateLTE() != null)
+            params.add(String.format("released.lte=%s", gameFilter.getReleaseDateLTE()));
+
+        return String.join("&", params);
+    }
+
     @Test
     void create() {
         GameDTO expected = new GameDTO(
@@ -148,7 +191,44 @@ class GameControllerImplTest {
                 .statusCode(HttpStatus.OK.getCode())
                 .extract()
                 .jsonPath()
-                .getList("$", GameDTO.class);
+                .getList("results", GameDTO.class);
+
+        assertThat(actual.size(), is(expected.size()));
+        assertThat(actual, containsInAnyOrder(expected.toArray()));
+    }
+
+    @Test
+    void getAllFiltered() {
+        GameFilter gameFilter = new GameFilter(
+                0,
+                2,
+                "Game Title",
+                LocalDate.of(2024, 1, 1),
+                LocalDate.of(2024, 6, 1)
+        );
+
+        List<GameDTO> filteredGames = filterGames(gameFilter);
+
+        int startIndex = Math.min(filteredGames.size(), gameFilter.getPageNumber() * gameFilter.getPageSize());
+        int endIndex = Math.min(filteredGames.size(), startIndex + gameFilter.getPageSize());
+
+        List<GameDTO> expected = filteredGames.subList(startIndex, endIndex);
+
+        Integer expectedPageNumber = gameFilter.getPageNumber();
+        Integer expectedTotalResults = filteredGames.size();
+        Integer expectedTotalPages = (int) getGamesPageCount(gameFilter.getPageSize(), (long) expectedTotalResults);
+
+        List<GameDTO> actual = given()
+                .when()
+                .get(String.format("/games?%s", convertFilterToQueryString(gameFilter)))
+                .then()
+                .statusCode(HttpStatus.OK.getCode())
+                .body("page_number", is(expectedPageNumber))
+                .body("total_pages", equalTo(expectedTotalPages))
+                .body("total_results", is(expectedTotalResults))
+                .extract()
+                .jsonPath()
+                .getList("results", GameDTO.class);
 
         assertThat(actual.size(), is(expected.size()));
         assertThat(actual, containsInAnyOrder(expected.toArray()));

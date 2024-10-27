@@ -10,6 +10,9 @@ import io.javalin.config.JavalinConfig;
 import io.javalin.http.HttpResponseException;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class AppConfig {
 
     private static ExceptionController exceptionController;
@@ -20,6 +23,8 @@ public class AppConfig {
     private static void configuration(JavalinConfig config) {
         config.router.contextPath = "/api";
         config.http.defaultContentType = "application/json";
+
+        config.validation.register(LocalDate.class, v -> LocalDate.parse(v, DateTimeFormatter.ofPattern("yyyy-M-d")));
 
         config.bundledPlugins.enableRouteOverview("/routes", AppRouteRole.ANYONE);
         config.bundledPlugins.enableDevLogging();
