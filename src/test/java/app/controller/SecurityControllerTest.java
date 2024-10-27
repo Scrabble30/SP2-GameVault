@@ -1,4 +1,4 @@
-package app.route;
+package app.controller;
 
 import app.PopulatorTestUtil;
 import app.SecurityTestUtil;
@@ -15,9 +15,10 @@ import org.junit.jupiter.api.*;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
-class SecurityRoutesTest {
+class SecurityControllerTest {
 
     private static PopulatorTestUtil populatorTestUtil;
     private static Javalin app;
@@ -60,7 +61,7 @@ class SecurityRoutesTest {
                 .get("/auth/test")
                 .then()
                 .statusCode(200)
-                .body("message", equalTo("Hello from open."));
+                .body("message", is("Hello from open."));
     }
 
     @Test
@@ -73,7 +74,7 @@ class SecurityRoutesTest {
                 .post("/auth/login")
                 .then()
                 .statusCode(200)
-                .body("username", equalTo(userDTO.getUsername()))
+                .body("username", is(userDTO.getUsername()))
                 .body("token", is(notNullValue()));
     }
 
@@ -87,7 +88,7 @@ class SecurityRoutesTest {
                 .post("/auth/register")
                 .then()
                 .statusCode(201)
-                .body("username", equalTo(userDTO.getUsername()))
+                .body("username", is(userDTO.getUsername()))
                 .body("token", is(notNullValue()));
     }
 
@@ -101,7 +102,7 @@ class SecurityRoutesTest {
                 .get("/protected/user_demo")
                 .then()
                 .statusCode(200)
-                .body("message", equalTo("Hello from user protected."));
+                .body("message", is("Hello from user protected."));
     }
 
     @Test
@@ -114,6 +115,6 @@ class SecurityRoutesTest {
                 .get("/protected/admin_demo")
                 .then()
                 .statusCode(200)
-                .body("message", equalTo("Hello from admin protected."));
+                .body("message", is("Hello from admin protected."));
     }
 }

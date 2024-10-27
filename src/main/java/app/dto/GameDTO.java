@@ -1,5 +1,6 @@
 package app.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class GameDTO {
     private String title;
 
     @JsonProperty("released")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private LocalDate releaseDate;
 
     @JsonProperty("background_image")
