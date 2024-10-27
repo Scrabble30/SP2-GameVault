@@ -124,11 +124,9 @@ class GameControllerImplTest {
 
     @Test
     void getById() {
-        String token = SecurityTestUtil.loginAccount("User1", "1234");
         GameDTO expected = gameDTOList.get(0);
 
         GameDTO actual = given()
-                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/games/{id}", expected.getId())
                 .then()
@@ -141,11 +139,9 @@ class GameControllerImplTest {
 
     @Test
     void getAll() {
-        String token = SecurityTestUtil.loginAccount("User1", "1234");
         List<GameDTO> expected = gameDTOList;
 
         List<GameDTO> actual = given()
-                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/games")
                 .then()
